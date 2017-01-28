@@ -15,6 +15,9 @@
 		081E9C821E39BB0F00DA4836 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C801E39BB0F00DA4836 /* LaunchScreen.storyboard */; };
 		081E9C8D1E39BB1000DA4836 /* FastListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C8C1E39BB1000DA4836 /* FastListTests.swift */; };
 		081E9C981E39BB1000DA4836 /* FastListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C971E39BB1000DA4836 /* FastListUITests.swift */; };
+		B8C49DB61E3D205B00788E5B /* MasterListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */; };
+		B8C49DB81E3D209C00788E5B /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB71E3D209C00788E5B /* AddItemViewController.swift */; };
+		B8C49DBA1E3D20B100788E5B /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB91E3D20B100788E5B /* SettingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		081E9C931E39BB1000DA4836 /* FastListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FastListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		081E9C971E39BB1000DA4836 /* FastListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastListUITests.swift; sourceTree = "<group>"; };
 		081E9C991E39BB1000DA4836 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterListViewController.swift; sourceTree = "<group>"; };
+		B8C49DB71E3D209C00788E5B /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
+		B8C49DB91E3D20B100788E5B /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +108,9 @@
 				081E9C741E39BB0F00DA4836 /* AppDelegate.swift */,
 				081E9C761E39BB0F00DA4836 /* ViewController.swift */,
 				081E9C781E39BB0F00DA4836 /* Main.storyboard */,
+				B8C49DB71E3D209C00788E5B /* AddItemViewController.swift */,
+				B8C49DB91E3D20B100788E5B /* SettingViewController.swift */,
+				B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */,
 				081E9C7E1E39BB0F00DA4836 /* Assets.xcassets */,
 				081E9C801E39BB0F00DA4836 /* LaunchScreen.storyboard */,
 				081E9C831E39BB0F00DA4836 /* Info.plist */,
@@ -265,9 +274,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8C49DB81E3D209C00788E5B /* AddItemViewController.swift in Sources */,
+				B8C49DB61E3D205B00788E5B /* MasterListViewController.swift in Sources */,
 				081E9C771E39BB0F00DA4836 /* ViewController.swift in Sources */,
 				081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */,
 				081E9C7D1E39BB0F00DA4836 /* FastList.xcdatamodeld in Sources */,
+				B8C49DBA1E3D20B100788E5B /* SettingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +530,7 @@
 				081E9C9E1E39BB1000DA4836 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		081E9C9F1E39BB1000DA4836 /* Build configuration list for PBXNativeTarget "FastListTests" */ = {
 			isa = XCConfigurationList;
@@ -526,6 +539,7 @@
 				081E9CA11E39BB1000DA4836 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		081E9CA21E39BB1000DA4836 /* Build configuration list for PBXNativeTarget "FastListUITests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +548,7 @@
 				081E9CA41E39BB1000DA4836 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

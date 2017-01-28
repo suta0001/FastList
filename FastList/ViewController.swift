@@ -10,9 +10,15 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBAction func addPressed(_ sender: Any) {
+        print("Add button pressed")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        print("FastList View Controller")
     }
 
     override func didReceiveMemoryWarning() {
