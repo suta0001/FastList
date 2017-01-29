@@ -29,7 +29,7 @@
                                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="GuQ-cK-kEU">
                                             <connections>
                                                 <action selector="addPressed:" destination="BYZ-38-t0r" id="dfN-Ri-Tsl"/>
-                                                <segue destination="qya-te-Ri3" kind="show" id="6eT-0M-fkn"/>
+                                                <segue destination="qya-te-Ri3" kind="show" identifier="toAddItemViewController" id="6eT-0M-fkn"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -66,6 +66,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="qya-te-Ri3" kind="show" identifier="editItem" id="xwM-xu-6A5"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -103,7 +106,7 @@
                                     <navigationItem title="All Items" id="iTZ-vH-TQy">
                                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Eej-6g-4ot">
                                             <connections>
-                                                <segue destination="qya-te-Ri3" kind="show" id="Y10-UF-7sa"/>
+                                                <segue destination="qya-te-Ri3" kind="show" identifier="toAddItemViewController" id="Y10-UF-7sa"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -140,6 +143,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="qya-te-Ri3" kind="show" identifier="editItem" id="c42-PV-nIF"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -260,9 +266,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Y10-UF-7sa"/>
+        <segue reference="xwM-xu-6A5"/>
+        <segue reference="2OH-Vh-Q2U"/>
         <segue reference="udc-fG-EGF"/>
-        <segue reference="9BM-yA-CDu"/>
         <segue reference="WOu-Fo-3MJ"/>
     </inferredMetricsTieBreakers>
 </document>
