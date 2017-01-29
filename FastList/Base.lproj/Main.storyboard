@@ -76,6 +76,9 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <connections>
+                        <outlet property="table" destination="pMm-Ri-Cw3" id="LFU-JP-keO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -147,6 +150,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="table" destination="gIz-WQ-mhT" id="yS4-0T-ykE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WGi-QW-PzE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -254,9 +260,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="Y10-UF-7sa"/>
         <segue reference="udc-fG-EGF"/>
         <segue reference="9BM-yA-CDu"/>
-        <segue reference="Y10-UF-7sa"/>
         <segue reference="WOu-Fo-3MJ"/>
     </inferredMetricsTieBreakers>
 </document>

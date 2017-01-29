@@ -11,6 +11,7 @@ import CoreData
 
 class MasterListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var table: UITableView!
     var cellContent = [String]()
     
     @IBAction func addPressed(_ sender: Any) {
@@ -34,6 +35,56 @@ class MasterListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         return cell
     }
+    
+    
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            let deleteValue = cellContent[indexPath.row]
+            
+            cellContent.remove(at: indexPath.row)
+            
+            table.reloadData()
+            
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+            
+            request.predicate = NSPredicate(format: "name = %@", deleteValue)
+            
+            request.returnsObjectsAsFaults = false
+            
+            
+            do {
+                let results = try context.fetch(request)
+                
+                if results.count > 0 {
+                    
+                    for result in results as! [NSManagedObject] {
+                        
+                        if (result.value(forKey: "name") as? String) != nil {
+                            
+                            context.delete(result)
+                            
+                            do {
+                                try context.save()
+                            } catch {
+                                print("There was an error saving after deleting item")
+                            }
+                        }
+                        
+                    }
+                }
+            } catch {
+                print("Error deleting item")
+            }
+            
+        }
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
