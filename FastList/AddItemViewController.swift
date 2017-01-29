@@ -13,9 +13,13 @@ class AddItemViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var itemNameTextField: UITextField!
     
+    var activeCell = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Add Item View Controller")
+        
+        itemNameTextField.text = activeCell
 
         // Do any additional setup after loading the view.
     }

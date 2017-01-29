@@ -13,6 +13,7 @@ class MasterListViewController: UIViewController, UITableViewDelegate, UITableVi
 
     @IBOutlet weak var table: UITableView!
     var cellContent = [String]()
+    var activeCell = String()
     
     @IBAction func addPressed(_ sender: Any) {
         print("Add button pressed")
@@ -82,6 +83,69 @@ class MasterListViewController: UIViewController, UITableViewDelegate, UITableVi
                 print("Error deleting item")
             }
             
+        }
+    }
+
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        activeCell = cellContent[indexPath.row]
+        print(activeCell)
+        performSegue(withIdentifier: "editItem", sender: nil)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "editItem" {
+            
+            let addItemViewController = segue.destination as! AddItemViewController
+            
+            print("Active Value is " + activeCell)
+            
+            addItemViewController.activeCell = activeCell
+            
+            
+            let deleteValue = activeCell
+            
+            table.reloadData()
+            
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+            
+            request.predicate = NSPredicate(format: "name = %@", deleteValue)
+            
+            request.returnsObjectsAsFaults = false
+            
+            
+            do {
+                let results = try context.fetch(request)
+                
+                if results.count > 0 {
+                    
+                    for result in results as! [NSManagedObject] {
+                        
+                        if (result.value(forKey: "name") as? String) != nil {
+                            
+                            context.delete(result)
+                            
+                            do {
+                                try context.save()
+                            } catch {
+                                print("There was an error saving after deleting item")
+                            }
+                        }
+                        
+                    }
+                }
+            } catch {
+                print("Error deleting item")
+            }
         }
     }
 
