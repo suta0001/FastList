@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+/*
 class MasterListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var table: UITableView!
@@ -206,3 +206,4 @@ class MasterListViewController: UIViewController, UITableViewDelegate, UITableVi
     */
 
 }
+*/

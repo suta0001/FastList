@@ -8,9 +8,9 @@
 
 import UIKit
 import CoreData
-
+/*
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+ 
     @IBOutlet weak var table: UITableView!
     
     var cellContent = [String]()
@@ -197,4 +197,4 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 
 }
-
+*/
