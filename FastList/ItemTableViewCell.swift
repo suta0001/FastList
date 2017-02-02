@@ -10,6 +10,11 @@ import UIKit
 
 class ItemTableViewCell: UITableViewCell {
 
+    // MARK: - Properties
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var statusButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,5 +25,11 @@ class ItemTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    // MARK: - Actions
+    
+    @IBAction func checkOffItem(_ sender: UIButton) {
+    }
+    
 
 }

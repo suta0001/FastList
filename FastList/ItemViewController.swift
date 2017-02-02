@@ -16,7 +16,6 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     var item: Item?
-    var activeCell = String()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,29 +77,12 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         
         let name = itemName.text ?? ""
         
-        item = Item(name: name)
-        
-        /*
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        let context = appDelegate.persistentContainer.viewContext
-        
-        let itemAdd = NSEntityDescription.insertNewObject(forEntityName: "Item", into: context)
-        
-        itemAdd.setValue(itemNameTextField.text ?? "Error", forKey: "name")
-        
-        do {
-            try context.save()
-            
-            print("Saved")
-        } catch {
-            
-            print("There was an error")
+        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        if let item = NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item {
+            item.name = name
         }
-        */
-        
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        appDelegate.saveContext()
     }
  
     // MARK: - Actions
