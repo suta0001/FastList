@@ -12,8 +12,9 @@ class ItemTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var statusButton: UIButton!
+    @IBOutlet weak var name: UIButton!
+    var indexPath: IndexPath = []
     
     override func awakeFromNib() {
         super.awakeFromNib()

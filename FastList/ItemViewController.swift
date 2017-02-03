@@ -37,12 +37,14 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    
     // MARK: - UIKit Overrides
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Keyboard disappears when tapped outside the text field.
         self.view.endEditing(true)
     }
+    
     
     // MARK: - UITextFieldDelegate
     
@@ -61,33 +63,28 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         updateSaveButtonState()
     }
 
-    // MARK: - Navigation
+    
+    // MARK: - Actions
 
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        
-        // Run the rest of the code only if Save button is pressed.
-        guard let button = sender as? UIBarButtonItem, button === saveButton else {
-            return
-        }
-        
+    @IBAction func save(_ sender: UIBarButtonItem) {
         let name = itemName.text ?? ""
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedObjectContext = appDelegate.persistentContainer.viewContext
+        if let item = item {
+            managedObjectContext.delete(item)
+        }
         if let item = NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item {
             item.name = name
         }
         appDelegate.saveContext()
+        dismiss(animated: true, completion: nil)
     }
- 
-    // MARK: - Actions
     
-
     
     // MARK: - Private Methods
     

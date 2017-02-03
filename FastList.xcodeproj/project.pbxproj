@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C741E39BB0F00DA4836 /* AppDelegate.swift */; };
-		081E9C771E39BB0F00DA4836 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C761E39BB0F00DA4836 /* ViewController.swift */; };
 		081E9C7A1E39BB0F00DA4836 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C781E39BB0F00DA4836 /* Main.storyboard */; };
 		081E9C7F1E39BB0F00DA4836 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C7E1E39BB0F00DA4836 /* Assets.xcassets */; };
 		081E9C821E39BB0F00DA4836 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C801E39BB0F00DA4836 /* LaunchScreen.storyboard */; };
@@ -20,7 +19,6 @@
 		08B4CEEE1E3E98D1007E3BB4 /* FastListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */; };
 		08B4CEF01E3E999C007E3BB4 /* AllItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */; };
 		08B4CEF21E3E99D0007E3BB4 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */; };
-		B8C49DB61E3D205B00788E5B /* MasterListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */; };
 		B8C49DB81E3D209C00788E5B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB71E3D209C00788E5B /* ItemViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +42,6 @@
 /* Begin PBXFileReference section */
 		081E9C711E39BB0F00DA4836 /* FastList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		081E9C741E39BB0F00DA4836 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		081E9C761E39BB0F00DA4836 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		081E9C791E39BB0F00DA4836 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		081E9C7E1E39BB0F00DA4836 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		081E9C811E39BB0F00DA4836 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -61,7 +58,6 @@
 		08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastListTableViewController.swift; sourceTree = "<group>"; };
 		08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewController.swift; sourceTree = "<group>"; };
 		08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterListViewController.swift; sourceTree = "<group>"; };
 		B8C49DB71E3D209C00788E5B /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,13 +111,11 @@
 			children = (
 				08ADA7C01E3EECA700B4CBCB /* Item.swift */,
 				081E9C741E39BB0F00DA4836 /* AppDelegate.swift */,
-				081E9C761E39BB0F00DA4836 /* ViewController.swift */,
 				086DB1B91E3EB81600AD993E /* ItemTableViewCell.swift */,
 				08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */,
 				08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */,
 				08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */,
 				B8C49DB71E3D209C00788E5B /* ItemViewController.swift */,
-				B8C49DB51E3D205B00788E5B /* MasterListViewController.swift */,
 				081E9C781E39BB0F00DA4836 /* Main.storyboard */,
 				081E9C7E1E39BB0F00DA4836 /* Assets.xcassets */,
 				081E9C801E39BB0F00DA4836 /* LaunchScreen.storyboard */,
@@ -289,9 +283,7 @@
 				08ADA7C11E3EECA700B4CBCB /* Item.swift in Sources */,
 				08ADA7CB1E3EF0E800B4CBCB /* FastList.xcdatamodeld in Sources */,
 				B8C49DB81E3D209C00788E5B /* ItemViewController.swift in Sources */,
-				B8C49DB61E3D205B00788E5B /* MasterListViewController.swift in Sources */,
 				08B4CEF01E3E999C007E3BB4 /* AllItemsTableViewController.swift in Sources */,
-				081E9C771E39BB0F00DA4836 /* ViewController.swift in Sources */,
 				081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */,
 				08B4CEEE1E3E98D1007E3BB4 /* FastListTableViewController.swift in Sources */,
 				086DB1BA1E3EB81600AD993E /* ItemTableViewCell.swift in Sources */,

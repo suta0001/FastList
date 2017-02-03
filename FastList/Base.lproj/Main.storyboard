@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C5b-e3-FuU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C5b-e3-FuU">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -41,7 +41,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m9p-Qr-m69" id="V5h-0e-Qk8">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duV-x2-7a0">
@@ -53,23 +53,24 @@
                                             </state>
                                             <connections>
                                                 <action selector="checkOffItem:" destination="m9p-Qr-m69" eventType="touchUpInside" id="MEl-cK-aiH"/>
+                                                <action selector="checkOffItem:" destination="glD-iH-FZh" eventType="touchUpInside" id="p6k-KY-8x8"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Item text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iz-cF-c3t">
-                                            <rect key="frame" x="43" y="11" width="324" height="21"/>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CkX-eY-VzL">
+                                            <rect key="frame" x="43" y="6" width="324" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <gestureRecognizers/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <state key="normal" title="Item text">
+                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
                                             <connections>
-                                                <outletCollection property="gestureRecognizers" destination="vlA-iB-PQG" appends="YES" id="vd3-MD-gBu"/>
+                                                <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="Vfz-ab-N0K"/>
                                             </connections>
-                                        </label>
+                                        </button>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="nameLabel" destination="2Iz-cF-c3t" id="ucf-wL-9FJ"/>
+                                    <outlet property="name" destination="CkX-eY-VzL" id="pej-LV-Z9f"/>
                                     <outlet property="statusButton" destination="duV-x2-7a0" id="lBR-qy-OE1"/>
                                 </connections>
                             </tableViewCell>
@@ -88,11 +89,6 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kf1-dP-8OS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="vlA-iB-PQG">
-                    <connections>
-                        <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="Zr0-Eh-dK9"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-647.20000000000005" y="-1916.4917541229386"/>
         </scene>
@@ -171,7 +167,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="nfR-do-J0B">
                             <connections>
-                                <segue destination="v5m-kx-M4Z" kind="unwind" unwindAction="unwindToItemListWithSender:" id="10P-jp-CGL"/>
+                                <action selector="save:" destination="qya-te-Ri3" id="ErK-iy-y6b"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -181,7 +177,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fT1-JA-ev1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="v5m-kx-M4Z" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1436" y="-1543.1784107946028"/>
         </scene>
@@ -216,73 +211,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Lmm-fA-asH" kind="relationship" relationship="rootViewController" id="2Oe-Wc-ovm"/>
+                        <segue destination="t7K-HJ-gvp" kind="relationship" relationship="rootViewController" id="7Hl-Mt-Uve"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4KG-nf-H3t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1586.4000000000001" y="-1200.4497751124438"/>
-        </scene>
-        <!--All Items-->
-        <scene sceneID="6ZN-DA-P3P">
-            <objects>
-                <tableViewController id="Lmm-fA-asH" customClass="AllItemsTableViewController" customModule="FastList" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="OTV-ji-UOD">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemTableViewCell" id="MPk-Bh-TbX" customClass="ItemTableViewCell" customModule="FastList" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MPk-Bh-TbX" id="vdD-4K-kKz">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNA-P7-mNj">
-                                            <rect key="frame" x="8" y="6" width="27" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="28"/>
-                                            <state key="normal" title="○">
-                                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            </state>
-                                        </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Item text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06f-TU-wHu">
-                                            <rect key="frame" x="43" y="11" width="324" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <gestureRecognizers/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                            <connections>
-                                                <outletCollection property="gestureRecognizers" destination="3Mx-XL-Apr" appends="YES" id="Ei8-Sr-zBf"/>
-                                            </connections>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Lmm-fA-asH" id="IHu-Wk-Fda"/>
-                            <outlet property="delegate" destination="Lmm-fA-asH" id="efG-g7-hNt"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="All Items" id="lRC-3z-X0C">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="20s-97-HN4">
-                            <connections>
-                                <segue destination="Bhu-eP-x3y" kind="presentation" identifier="AddItem" id="miW-oC-fVN"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SVd-00-Olq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="3Mx-XL-Apr">
-                    <connections>
-                        <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="Gec-cs-xk6"/>
-                    </connections>
-                </tapGestureRecognizer>
-            </objects>
-            <point key="canvasLocation" x="-647" y="-1200"/>
         </scene>
         <!--Settings-->
         <scene sceneID="WXG-TH-MxJ">
@@ -321,8 +255,72 @@
             </objects>
             <point key="canvasLocation" x="496.80000000000001" y="-1543.1784107946028"/>
         </scene>
+        <!--All Items-->
+        <scene sceneID="8gJ-HY-eTe">
+            <objects>
+                <tableViewController id="t7K-HJ-gvp" userLabel="All Items" customClass="AllItemsTableViewController" customModule="FastList" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Mlb-Qp-Dgp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemTableViewCell" id="vLn-J9-Sxj" customClass="ItemTableViewCell" customModule="FastList" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vLn-J9-Sxj" id="f6g-8z-xK2">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ybj-S4-xZ4">
+                                            <rect key="frame" x="8" y="6" width="27" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="28"/>
+                                            <state key="normal" title="○">
+                                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="checkOffItem:" destination="t7K-HJ-gvp" eventType="touchUpInside" id="EcO-pL-vpX"/>
+                                                <action selector="checkOffItem:" destination="vLn-J9-Sxj" eventType="touchUpInside" id="g0R-g5-yfA"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Svy-kM-AWs">
+                                            <rect key="frame" x="43" y="6" width="324" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <state key="normal" title="Item text">
+                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="185-mA-Vze"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="name" destination="Svy-kM-AWs" id="eZO-fU-GEa"/>
+                                    <outlet property="statusButton" destination="ybj-S4-xZ4" id="lkx-tW-Yfk"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="t7K-HJ-gvp" id="1HC-Il-gNa"/>
+                            <outlet property="delegate" destination="t7K-HJ-gvp" id="aJQ-VG-btC"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="All Items" id="LGA-Xf-c7U" userLabel="All Items">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="ht6-ri-qrQ">
+                            <connections>
+                                <segue destination="Bhu-eP-x3y" kind="presentation" identifier="AddItem" id="bu2-7q-dQq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H8y-PE-Msb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-647" y="-1200"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="oPn-xm-vtG"/>
+        <segue reference="Vfz-ab-N0K"/>
     </inferredMetricsTieBreakers>
 </document>
