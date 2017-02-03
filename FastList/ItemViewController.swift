@@ -15,7 +15,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    var item: Item?
+    weak var item: Item?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,12 +75,10 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedObjectContext = appDelegate.persistentContainer.viewContext
-        if let item = item {
-            managedObjectContext.delete(item)
-        }
-        if let item = NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item {
-            item.name = name
-        }
+        let item = self.item ?? (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item)
+        
+        item!.name = name
+        
         appDelegate.saveContext()
         dismiss(animated: true, completion: nil)
     }
