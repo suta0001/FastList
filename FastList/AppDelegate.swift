@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  FastList
 //
-//  Created by Agustinus Sutandi on 1/25/17.
+//  Created by Agustinus Sutandi and Abdullah Syed on 1/25/17.
 //  Copyright © 2017 FastListTeam. All rights reserved.
 //
 
