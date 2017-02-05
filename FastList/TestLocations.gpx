@@ -9,6 +9,9 @@
     <wpt lat="37.422" lon="-122.084058">
         <name>Google</name>
     </wpt>
+    <wpt lat="38.422" lon="-123.084058">
+        <name>Transit</name>
+    </wpt>
     <wpt lat="37.3270145" lon="-122.0310273">
         <name>Apple</name>
     </wpt>

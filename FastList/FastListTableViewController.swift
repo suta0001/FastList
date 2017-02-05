@@ -15,7 +15,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     // MARK: - Properties
     
     let locationManager = CLLocationManager()
-    let locationRadius = 10
+    let locationRadius = 1000
     
     
     
@@ -23,7 +23,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initializeFetchedResultsController()
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
@@ -32,6 +32,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
 
         
         initializeRegionMonitoring()
+        initializeFetchedResultsController()
         
         
         // Uncomment the following line to preserve selection between presentations
@@ -95,52 +96,17 @@ extension FastListTableViewController  {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if region is CLCircularRegion {
-            
-/*
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let context1 = appDelegate.persistentContainer.viewContext
-            let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
-            request1.predicate = NSPredicate(format: "locationTitle = %@","\(region.identifier)")
-            print(region.identifier)
-            request1.returnsObjectsAsFaults = false
-            do {
-                let results = try context1.fetch(request1)
-                if results.count > 0 {
-                    for result in results as! [NSManagedObject] {
-                        if let title = result.value(forKey: "locationTitle") as? String {
-                            let long = result.value(forKey: "locationLongitude")
-                            let lat = result.value(forKey: "locationLatitude")
-                            let name = result.value(forKey: "name")
-                            print("FastList: \(title) \(long) \(lat) \(name)")
-                            
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            let managedObjectContext = appDelegate.persistentContainer.viewContext
-                            let item = self.fastListItem ?? (NSEntityDescription.insertNewObject(forEntityName: "FastListItem", into: managedObjectContext) as? FastListItem)
-                            if let name1 = name as? String {
-                                item!.name = name1
-                            }
-                            if let long1 = long as? Double {
-                                item!.locationLongitude = long1
-                            }
-                            if let lat1 = lat as? Double {
-                                item!.locationLatitude = lat1
-                            }
-                            item!.locationTitle = title
-                            appDelegate.saveContext()
-                        }
-                    }
-                }
-            } catch {
-                
-            }*/
+            reloadFetchedResultsController(location: region.identifier)
             handleEvent(forRegion: region)
-            //tableView.reloadData()
+            tableView.reloadData()
+            
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if region is CLCircularRegion {
-            //handleEvent(forRegion: region)
+            initializeFetchedResultsController()
+            tableView.reloadData()
         }
     }
     
@@ -156,10 +122,32 @@ extension FastListTableViewController  {
         let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
         let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
         let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        //let predicate = NSPredicate(format: "isCompleted = false")
+        let predicate = NSPredicate(format: "name = %@","")
         
         request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
-        //request.predicate = predicate
+        request.predicate = predicate
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let moc = appDelegate.persistentContainer.viewContext
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+    }
+    
+    func reloadFetchedResultsController(location: String) {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+        let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
+        let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
+        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
+        let predicate = NSPredicate(format: "locationTitle = %@",location)
+        
+        request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
+        request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
