@@ -178,11 +178,11 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        let predicate = NSPredicate(format: "isCompleted = false")
+        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
+        //let predicate = NSPredicate(format: "isCompleted = false")
         
-        request.sortDescriptors = [nameSort]
-        request.predicate = predicate
+        request.sortDescriptors = [dateSort]
+        //request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
@@ -202,6 +202,14 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
         
         cell.name.setTitle(selectedObject.name, for: .normal)
+        cell.name.setTitleColor(UIColor.darkText, for: .normal)
+        cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
+        if let dueDate = selectedObject.dueDate as? Date {
+            if dueDate < Date() {
+                cell.name.setTitleColor(UIColor.red, for: .normal)
+                cell.statusButton.setTitleColor(UIColor.red, for: .normal)
+            }
+        }
         cell.isCompleted = selectedObject.isCompleted
         let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row
         cell.name.tag = codedIndexPath
