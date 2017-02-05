@@ -14,6 +14,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Properties
     
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
+    var fetchedResultsControllerFastList: NSFetchedResultsController<NSFetchRequestResult>!
     let maxNumberOfItemsInSection = 1000
     
     override func viewDidLoad() {
@@ -177,6 +178,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Helper functions
     
     func initializeFetchedResultsController() {
+        
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
         //let predicate = NSPredicate(format: "isCompleted = false")
@@ -194,14 +196,16 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         } catch {
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
+        
     }
+    
     
     // MARK: - Private functions
     
     private func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
-        
         cell.name.setTitle(selectedObject.name, for: .normal)
+        print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
         cell.name.setTitleColor(UIColor.darkText, for: .normal)
         cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
         if let dueDate = selectedObject.dueDate as? Date {
