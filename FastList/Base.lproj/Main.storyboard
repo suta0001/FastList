@@ -181,7 +181,17 @@
                                 <date key="date" timeIntervalSinceReferenceDate="507959548.02347898">
                                     <!--2017-02-05 03:52:28 +0000-->
                                 </date>
+                                <connections>
+                                    <action selector="changeDueDate:" destination="qya-te-Ri3" eventType="valueChanged" id="FtS-K8-0aT"/>
+                                </connections>
                             </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Current Due Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MZ9-lB-k1K">
+                                <rect key="frame" x="104" y="182" width="178" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -199,6 +209,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="dueDate" destination="GX4-q6-BrJ" id="tSt-sb-1gz"/>
+                        <outlet property="dueDateLabel" destination="MZ9-lB-k1K" id="D68-r9-Zrt"/>
                         <outlet property="hasDueDate" destination="kvn-gw-mVz" id="hAn-7M-tMh"/>
                         <outlet property="itemName" destination="qEU-gT-X3q" id="epE-Mu-J3x"/>
                         <outlet property="saveButton" destination="nfR-do-J0B" id="0jR-Wn-aK3"/>

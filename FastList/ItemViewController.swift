@@ -17,6 +17,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var dueDate: UIDatePicker!
     @IBOutlet weak var hasDueDate: UISwitch!
+    @IBOutlet weak var dueDateLabel: UILabel!
     weak var item: Item?
 
     override func viewDidLoad() {
@@ -36,6 +37,8 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
                 dueDate.setDate(item.dueDate as! Date, animated: true)
             }
         }
+        dueDateLabel.text = formatDateLabel(date: dueDate.date)
+
 
         // Update Save button state.
         updateSaveButtonState()
@@ -83,6 +86,10 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         hasDueDate.setOn(!hasDueDate.isOn, animated: true)
     }
     
+    @IBAction func changeDueDate(_ sender: UIDatePicker) {
+        dueDateLabel.text = formatDateLabel(date: sender.date)
+    }
+    
     @IBAction func save(_ sender: UIBarButtonItem) {
         let name = itemName.text ?? ""
         
@@ -118,4 +125,10 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         saveButton.isEnabled = !text.isEmpty
     }
     
+    private func formatDateLabel(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
+    }
 }
