@@ -162,7 +162,17 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Actions
     
     @IBAction func checkOffItem(_ sender: UIButton) {
-        print("Check off item")
+        let indexPath = IndexPath(row: sender.tag % maxNumberOfItemsInSection, section: sender.tag / maxNumberOfItemsInSection)
+        guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController")
+        }
+        selectedObject.isCompleted = !selectedObject.isCompleted
+        if selectedObject.completedDate == nil {
+            selectedObject.completedDate = Date() as NSDate
+        } else {
+            selectedObject.completedDate = nil
+        }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.saveContext()
     }
     
     // MARK: - Helper functions
@@ -170,8 +180,11 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     func initializeFetchedResultsController() {
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        let nameSort = NSSortDescriptor(key: "name", ascending: true)
-        request.sortDescriptors = [nameSort]
+        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
+        //let predicate = NSPredicate(format: "isCompleted = false")
+        
+        request.sortDescriptors = [dateSort]
+        //request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
@@ -193,6 +206,17 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
         cell.name.setTitle(selectedObject.name, for: .normal)
         print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
-        cell.name.tag = indexPath.section * maxNumberOfItemsInSection + indexPath.row
+        cell.name.setTitleColor(UIColor.darkText, for: .normal)
+        cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
+        if let dueDate = selectedObject.dueDate as? Date {
+            if dueDate < Date() {
+                cell.name.setTitleColor(UIColor.red, for: .normal)
+                cell.statusButton.setTitleColor(UIColor.red, for: .normal)
+            }
+        }
+        cell.isCompleted = selectedObject.isCompleted
+        let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row
+        cell.name.tag = codedIndexPath
+        cell.statusButton.tag = codedIndexPath
     }
 }

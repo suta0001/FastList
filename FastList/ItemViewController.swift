@@ -23,6 +23,8 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     var tempLocationTitle = ""
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var dueDate: UIDatePicker!
+    @IBOutlet weak var hasDueDate: UISwitch!
     weak var item: Item?
 
     override func viewDidLoad() {
@@ -34,6 +36,13 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         // When editing an existing Item, need to use passed info.
         if let item = item {
             itemName.text = item.name
+            if item.dueDate == nil {
+                hasDueDate.isOn = false
+                dueDate.setDate(Date(), animated: true)
+            } else {
+                hasDueDate.isOn = true
+                dueDate.setDate(item.dueDate as! Date, animated: true)
+            }
         }
 
         // Update Save button state.
@@ -78,20 +87,40 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func toggleDueDateSwitch(_ sender: UISwitch) {
+        hasDueDate.setOn(!hasDueDate.isOn, animated: true)
+    }
+    
     @IBAction func save(_ sender: UIBarButtonItem) {
         let name = itemName.text ?? ""
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedObjectContext = appDelegate.persistentContainer.viewContext
-        let item = self.item ?? (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item)
+        if item == nil {
+            item = (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as! Item)
+            item!.isCompleted = false
+            item!.creationDate = Date() as NSDate
+            item!.completedDate = nil
+            item!.hasDueDate = 0
+        }
         
         item!.name = name
-        item!.locationLongitude = tempLocationLongitude
-        item!.locationLatitude = tempLocationLatitude
-        item!.locationTitle = tempLocationTitle
+        if(tempLocationTitle != "") {
+            item!.locationLongitude = tempLocationLongitude
+            item!.locationLatitude = tempLocationLatitude
+            item!.locationTitle = tempLocationTitle
+        }
         
         print("\(item!.name) \(item!.locationLatitude) \(item!.locationLongitude) \(item!.locationTitle)")
 
+        if hasDueDate.isOn {
+            item!.dueDate = dueDate.date as NSDate
+            item!.hasDueDate = 1
+        } else {
+            item!.dueDate = nil
+            item!.hasDueDate = 0
+        }
+      
         appDelegate.saveContext()
         dismiss(animated: true, completion: nil)
     }
