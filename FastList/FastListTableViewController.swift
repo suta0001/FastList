@@ -28,10 +28,11 @@ class FastListTableViewController: AllItemsTableViewController {
     override func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: true)
-        let nameSort = NSSortDescriptor(key: "dueDate", ascending: true)
+        let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
+        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
         //let predicate = NSPredicate(format: "isCompleted = false")
         
-        request.sortDescriptors = [hasDueDateSort, nameSort]
+        request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
         //request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
