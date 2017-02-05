@@ -9,10 +9,18 @@
 import UIKit
 import CoreData
 
+protocol LocationInfo{
+    func sendValue(title:String, longitude:Double, latitude:Double)
+}
+
 class ItemViewController: UIViewController, UITextFieldDelegate {
 
+    
     // MARK: - Properties
     
+    var tempLocationLongitude = 0.0
+    var tempLocationLatitude = 0.0
+    var tempLocationTitle = ""
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     weak var item: Item?
@@ -78,11 +86,34 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         let item = self.item ?? (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item)
         
         item!.name = name
+        item!.locationLongitude = tempLocationLongitude
+        item!.locationLatitude = tempLocationLatitude
+        item!.locationTitle = tempLocationTitle
         
+        print("\(item!.name) \(item!.locationLatitude) \(item!.locationLongitude) \(item!.locationTitle)")
+
         appDelegate.saveContext()
         dismiss(animated: true, completion: nil)
     }
     
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        switch(segue.identifier ?? "") {
+        case "LocationSelect":
+            guard let itemViewController = (segue.destination as? UINavigationController)?.topViewController as? LocationSelectViewController else {
+                fatalError("Destination not valid: \(segue.destination)")
+            }
+            
+            itemViewController.LocationInfoDelegate = self
+        default:
+            fatalError("Invalid segue: \(segue.identifier)")
+        }
+    }
     
     // MARK: - Private Methods
     
@@ -92,4 +123,14 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         saveButton.isEnabled = !text.isEmpty
     }
     
+}
+
+extension ItemViewController:LocationInfo {
+    
+    func sendValue(title: String, longitude: Double, latitude: Double) {
+        tempLocationLongitude = longitude
+        tempLocationLatitude = latitude
+        tempLocationTitle = title
+        print("\(tempLocationTitle)")
+    }
 }
