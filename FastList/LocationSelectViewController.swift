@@ -29,9 +29,10 @@ class LocationSelectViewController: UIViewController {
     
     var selectedPin:MKPlacemark? = nil
     var LocationInfoDelegate:LocationInfo!
+    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchNav: UINavigationBar!
-    @IBOutlet weak var doneB: UIBarButtonItem!
+    @IBOutlet weak var doneButtonU: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,7 +79,7 @@ class LocationSelectViewController: UIViewController {
     func updateDoneButton() {
         // Disable the Save button if the text field is empty.
         let text = locationTitle
-        doneB.isEnabled = !text.isEmpty
+        doneButtonU.isEnabled = !text.isEmpty
     }
     
     @IBAction func doneButton(_ sender: UIBarButtonItem) {
