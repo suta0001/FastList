@@ -16,7 +16,6 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     let locationManager = CLLocationManager()
     let locationRadius = 10
-    weak var fastListItem: FastListItem?
     
     
     
@@ -24,7 +23,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initializeFetchedResultsController(isFastList: true)
+        initializeFetchedResultsController()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()

@@ -16,12 +16,11 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     var fetchedResultsControllerFastList: NSFetchedResultsController<NSFetchRequestResult>!
     let maxNumberOfItemsInSection = 1000
-    var isFastListView = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initializeFetchedResultsController(isFastList: false)
+        initializeFetchedResultsController()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -46,16 +45,8 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         guard let sections = fetchedResultsController.sections else {
             fatalError("No sections in fetchedResultsController")
         }
-        if(isFastListView) {
-            guard let sections = fetchedResultsControllerFastList.sections else {
-                fatalError("No sections in fetchedResultsController")
-            }
-            let sectionInfo = sections[section]
-            return sectionInfo.numberOfObjects
-        } else {
-            let sectionInfo = sections[section]
-            return sectionInfo.numberOfObjects
-        }
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -176,8 +167,8 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     // MARK: - Helper functions
     
-    func initializeFetchedResultsController(isFastList: Bool) {
-        isFastListView = isFastList
+    func initializeFetchedResultsController() {
+        
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [nameSort]
@@ -193,22 +184,6 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
         
-        // Fast List fetch controller
-        
-        let requestFastList = NSFetchRequest<NSFetchRequestResult>(entityName: "FastListItem")
-        let nameSortFastList = NSSortDescriptor(key: "name", ascending: true)
-        requestFastList.sortDescriptors = [nameSortFastList]
-        
-        let appDelegateFastList = UIApplication.shared.delegate as! AppDelegate
-        let mocFastList = appDelegateFastList.persistentContainer.viewContext
-        fetchedResultsControllerFastList = NSFetchedResultsController(fetchRequest: requestFastList, managedObjectContext: mocFastList, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsControllerFastList.delegate = self
-        
-        do {
-            try fetchedResultsControllerFastList.performFetch()
-        } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
-        }
     }
     
     
@@ -216,14 +191,8 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     private func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
-        if(isFastListView) {
-            guard let selectedObject = fetchedResultsControllerFastList.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
-            cell.name.setTitle(selectedObject.name, for: .normal)
-            print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
-        } else {
-            cell.name.setTitle(selectedObject.name, for: .normal)
-            print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
-        }
+        cell.name.setTitle(selectedObject.name, for: .normal)
+        print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
         cell.name.tag = indexPath.section * maxNumberOfItemsInSection + indexPath.row
     }
 }
