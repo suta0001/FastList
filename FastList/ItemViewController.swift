@@ -93,16 +93,16 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             item!.isCompleted = false
             item!.creationDate = Date() as NSDate
             item!.completedDate = nil
-            item!.hasDueDate = false
+            item!.hasDueDate = 0
         }
         
         item!.name = name
         if hasDueDate.isOn {
             item!.dueDate = dueDate.date as NSDate
-            item!.hasDueDate = true
+            item!.hasDueDate = 1
         } else {
             item!.dueDate = nil
-            item!.hasDueDate = false
+            item!.hasDueDate = 0
         }
       
         appDelegate.saveContext()
