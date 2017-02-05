@@ -75,10 +75,15 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedObjectContext = appDelegate.persistentContainer.viewContext
-        let item = self.item ?? (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as? Item)
+        if item == nil {
+            item = (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as! Item)
+            item!.isCompleted = false
+            item!.creationDate = Date() as NSDate
+            item!.completedDate = nil
+        }
         
         item!.name = name
-        
+      
         appDelegate.saveContext()
         dismiss(animated: true, completion: nil)
     }

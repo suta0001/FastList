@@ -161,7 +161,17 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Actions
     
     @IBAction func checkOffItem(_ sender: UIButton) {
-        print("Check off item")
+        let indexPath = IndexPath(row: sender.tag % maxNumberOfItemsInSection, section: sender.tag / maxNumberOfItemsInSection)
+        guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController")
+        }
+        selectedObject.isCompleted = !selectedObject.isCompleted
+        if selectedObject.completedDate == nil {
+            selectedObject.completedDate = Date() as NSDate
+        } else {
+            selectedObject.completedDate = nil
+        }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.saveContext()
     }
     
     // MARK: - Helper functions
@@ -169,7 +179,10 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let nameSort = NSSortDescriptor(key: "name", ascending: true)
+        let predicate = NSPredicate(format: "isCompleted = false")
+        
         request.sortDescriptors = [nameSort]
+        request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
@@ -189,6 +202,9 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
         
         cell.name.setTitle(selectedObject.name, for: .normal)
-        cell.name.tag = indexPath.section * maxNumberOfItemsInSection + indexPath.row
+        cell.isCompleted = selectedObject.isCompleted
+        let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row
+        cell.name.tag = codedIndexPath
+        cell.statusButton.tag = codedIndexPath
     }
 }

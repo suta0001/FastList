@@ -14,7 +14,11 @@ class ItemTableViewCell: UITableViewCell {
     
     @IBOutlet weak var statusButton: UIButton!
     @IBOutlet weak var name: UIButton!
-    var indexPath: IndexPath = []
+    var isCompleted = false {
+        didSet {
+            updateButtons()
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,10 +31,10 @@ class ItemTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    // MARK: - Actions
+    // MARK: - Private methods
     
-    @IBAction func checkOffItem(_ sender: UIButton) {
+    private func updateButtons() {
+        statusButton.isSelected = isCompleted
+        name.isSelected = isCompleted
     }
-    
-
 }
