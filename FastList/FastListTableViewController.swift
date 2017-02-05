@@ -96,7 +96,7 @@ extension FastListTableViewController  {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if region is CLCircularRegion {
             
-
+/*
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context1 = appDelegate.persistentContainer.viewContext
             let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
@@ -132,7 +132,7 @@ extension FastListTableViewController  {
                 }
             } catch {
                 
-            }
+            }*/
             handleEvent(forRegion: region)
             //tableView.reloadData()
         }
