@@ -14,7 +14,6 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     // MARK: - Properties
     
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
-    var fetchedResultsControllerFastList: NSFetchedResultsController<NSFetchRequestResult>!
     let maxNumberOfItemsInSection = 1000
     
     override func viewDidLoad() {

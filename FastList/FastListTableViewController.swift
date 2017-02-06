@@ -10,14 +10,13 @@ import UIKit
 import CoreData
 import MapKit
 
+
 class FastListTableViewController:AllItemsTableViewController, CLLocationManagerDelegate {
     
     // MARK: - Properties
     
     let locationManager = CLLocationManager()
     let locationRadius = 1000
-    
-    
     
     
     override func viewDidLoad() {
@@ -32,7 +31,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
 
         
         initializeRegionMonitoring()
-        initializeFetchedResultsController()
+        initializeFetchedResultsController(location: "")
         
         
         // Uncomment the following line to preserve selection between presentations
@@ -42,11 +41,6 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-
-}
-
-
-extension FastListTableViewController  {
 
     // MARK: - Location based Fast List
     
@@ -85,6 +79,8 @@ extension FastListTableViewController  {
         return region
     }
     
+    // MARK: - CLLocationManagerDelegate
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
     }
@@ -96,7 +92,7 @@ extension FastListTableViewController  {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if region is CLCircularRegion {
-            reloadFetchedResultsController(location: region.identifier)
+            initializeFetchedResultsController(location: region.identifier)
             handleEvent(forRegion: region)
             tableView.reloadData()
             
@@ -105,7 +101,7 @@ extension FastListTableViewController  {
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if region is CLCircularRegion {
-            initializeFetchedResultsController()
+            initializeFetchedResultsController(location: "")
             tableView.reloadData()
         }
     }
@@ -117,14 +113,16 @@ extension FastListTableViewController  {
     
     // MARK: - Helper functions
     
-    override func initializeFetchedResultsController() {
+    func initializeFetchedResultsController(location: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+       
         let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
         let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
         let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        let predicate = NSPredicate(format: "name = %@","")
-        
         request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
+        
+        // Fetch based on location first
+        var predicate = NSPredicate(format: "locationTitle = %@",location)
         request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -136,6 +134,16 @@ extension FastListTableViewController  {
             try fetchedResultsController.performFetch()
         } catch {
             fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
+        if fetchedResultsController.fetchedObjects?.count == 0 {
+                predicate = NSPredicate(format: "locationTitle = %@","")
+                request.predicate = nil
+            do {
+                try fetchedResultsController.performFetch()
+            } catch {
+                fatalError("Failed to initialize FetchedResultsController: \(error)")
+            }
         }
     }
     
