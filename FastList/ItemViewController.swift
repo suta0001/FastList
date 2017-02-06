@@ -26,6 +26,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var dueDate: UIDatePicker!
     @IBOutlet weak var hasDueDate: UISwitch!
     @IBOutlet weak var dueDateLabel: UILabel!
+    @IBOutlet weak var locationLabel: UIButton!
     weak var item: Item?
 
     override func viewDidLoad() {
