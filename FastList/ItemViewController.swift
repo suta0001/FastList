@@ -21,6 +21,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     var tempLocationLongitude = 0.0
     var tempLocationLatitude = 0.0
     var tempLocationTitle = ""
+    var tempLocationChanged = false
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var dueDate: UIDatePicker!
@@ -34,10 +35,15 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         
         // Handle the text field's user input through delegate callbacks.
         itemName.delegate = self
-        
+        locationLabel.setTitle("Select Location", for: [])
         // When editing an existing Item, need to use passed info.
         if let item = item {
             itemName.text = item.name
+            if(item.locationTitle != "") {
+                locationLabel.setTitle(item.locationTitle, for: [])
+            } else {
+                locationLabel.setTitle("Select Location", for: [])
+            }
             if item.dueDate == nil {
                 hasDueDate.isOn = false
                 dueDate.setDate(Date(), animated: true)
@@ -110,10 +116,14 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             item!.creationDate = Date() as NSDate
             item!.completedDate = nil
             item!.hasDueDate = 0
+            item!.locationLongitude = 0.0
+            item!.locationLatitude = 0.0
+            item!.locationTitle = ""
+            
         }
         
         item!.name = name
-        if(tempLocationTitle != "") {
+        if(tempLocationChanged) {
             item!.locationLongitude = tempLocationLongitude
             item!.locationLatitude = tempLocationLatitude
             item!.locationTitle = tempLocationTitle
@@ -174,6 +184,10 @@ extension ItemViewController:LocationInfo {
         tempLocationLongitude = longitude
         tempLocationLatitude = latitude
         tempLocationTitle = title
+        tempLocationChanged = true;
         print("\(tempLocationTitle)")
+        if(tempLocationTitle != "") {
+            locationLabel.setTitle(tempLocationTitle, for: [])
+        }
     }
 }

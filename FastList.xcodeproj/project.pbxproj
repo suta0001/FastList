@@ -61,6 +61,9 @@
 		08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastListTableViewController.swift; sourceTree = "<group>"; };
 		08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllItemsTableViewController.swift; sourceTree = "<group>"; };
 		08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		B81217F21E483C0500EAE419 /* UWBothellLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UWBothellLocation.gpx; sourceTree = "<group>"; };
+		B81217F31E483C1700EAE419 /* UWSeattleLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UWSeattleLocation.gpx; sourceTree = "<group>"; };
+		B81217F41E483C2A00EAE419 /* FredMayerLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FredMayerLocation.gpx; sourceTree = "<group>"; };
 		B867E3271E47AE380077D908 /* TestLocations.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TestLocations.gpx; sourceTree = "<group>"; };
 		B8C49DB71E3D209C00788E5B /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 		B8D3C6871E465D240017FC75 /* LocationSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSelectViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +128,9 @@
 				08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */,
 				08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */,
 				B867E3271E47AE380077D908 /* TestLocations.gpx */,
+				B81217F21E483C0500EAE419 /* UWBothellLocation.gpx */,
+				B81217F31E483C1700EAE419 /* UWSeattleLocation.gpx */,
+				B81217F41E483C2A00EAE419 /* FredMayerLocation.gpx */,
 				B8C49DB71E3D209C00788E5B /* ItemViewController.swift */,
 				081E9C781E39BB0F00DA4836 /* Main.storyboard */,
 				B8D3C68C1E4679D10017FC75 /* LocationSearchTable.swift */,

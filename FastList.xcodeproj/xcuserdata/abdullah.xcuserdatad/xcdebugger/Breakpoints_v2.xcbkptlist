@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FastList/ItemViewController.swift"
-            timestampString = "507955502.403001"
+            timestampString = "508301144.032127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
             landmarkName = "ItemViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -96,6 +96,22 @@
             startingLineNumber = "35"
             endingLineNumber = "35"
             landmarkName = "LocationSelectViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FastList/ItemViewController.swift"
+            timestampString = "508301144.032127"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "ItemViewController"
             landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
