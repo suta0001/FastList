@@ -17,6 +17,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     let locationManager = CLLocationManager()
     let locationRadius = 1000
+    let futureDateToDisplayInSeconds = 2.0 * 3600 // Placeholder at 2 hours, will need to move to UserDefaults
     
     
     override func viewDidLoad() {
@@ -122,8 +123,10 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
         
         // Fetch based on location first
-        var predicate = NSPredicate(format: "locationTitle = %@",location)
-        request.predicate = predicate
+        let locPredicate = NSPredicate(format: "locationTitle = %@", location)
+        let maxDateToDisplay = Date(timeIntervalSinceNow: futureDateToDisplayInSeconds)
+        let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locPredicate, timePredicate])
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
@@ -137,35 +140,12 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         }
         
         if fetchedResultsController.fetchedObjects?.count == 0 {
-                predicate = NSPredicate(format: "locationTitle = %@","")
-                request.predicate = nil
+            request.predicate = timePredicate
             do {
                 try fetchedResultsController.performFetch()
             } catch {
                 fatalError("Failed to initialize FetchedResultsController: \(error)")
             }
-        }
-    }
-    
-    func reloadFetchedResultsController(location: String) {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
-        let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
-        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        let predicate = NSPredicate(format: "locationTitle = %@",location)
-        
-        request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
-        request.predicate = predicate
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let moc = appDelegate.persistentContainer.viewContext
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
-        
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
     }
     
