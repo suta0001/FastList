@@ -70,6 +70,34 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         if editingStyle == .delete {
             guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
             fetchedResultsController.managedObjectContext.delete(selectedObject)
+            if let location = selectedObject.locationTitle {
+                if location != "" {
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    let managedObjectContext = appDelegate.persistentContainer.viewContext
+                    let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+                    request.predicate = NSPredicate(format: "locationTitle != %@", location)
+                    request.returnsObjectsAsFaults = false
+                    do {
+                        let results = try managedObjectContext.fetch(request)
+                        if results.count > 0 {
+                            for result in results as! [NSManagedObject] {
+                                if var count = result.value(forKey: "count") as? Int32 {
+                                    if count > 1 {
+                                        count = count - 1;
+                                        result.setValue(count, forKey: "count")
+                                    } else {
+                                        appDelegate.stopMonitoring(title: result.value(forKey: "locationTitle") as! String, longitude: result.value(forKey: "locationLongitude") as! Double, latitude: result.value(forKey: "locationLatitude") as! Double)
+                                        managedObjectContext.delete(result)
+                                    }
+                                }
+                            }
+                        }
+                    } catch {
+                        
+                    }
+                    
+                }
+            }
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
             //tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -204,7 +232,6 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     private func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
         cell.name.setTitle(selectedObject.name, for: .normal)
-        print("\(selectedObject.name)  \(selectedObject.locationTitle) \(selectedObject.locationLatitude) \(selectedObject.locationLongitude) ")
         cell.name.setTitleColor(UIColor.darkText, for: .normal)
         cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
         if let dueDate = selectedObject.dueDate as? Date {

@@ -29,6 +29,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var locationLabel: UIButton!
     weak var item: Item?
+    weak var location: Location?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,20 +117,15 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             item!.creationDate = Date() as NSDate
             item!.completedDate = nil
             item!.hasDueDate = 0
-            item!.locationLongitude = 0.0
-            item!.locationLatitude = 0.0
             item!.locationTitle = ""
             
         }
         
         item!.name = name
         if(tempLocationChanged) {
-            item!.locationLongitude = tempLocationLongitude
-            item!.locationLatitude = tempLocationLatitude
             item!.locationTitle = tempLocationTitle
         }
         
-        print("\(item!.name) \(item!.locationLatitude) \(item!.locationLongitude) \(item!.locationTitle)")
 
         if hasDueDate.isOn {
             item!.dueDate = dueDate.date as NSDate
@@ -138,6 +134,34 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             item!.dueDate = nil
             item!.hasDueDate = 0
         }
+        
+        if(tempLocationTitle != ""){
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+        request.predicate = NSPredicate(format: "locationTitle != %@",tempLocationTitle)
+        request.returnsObjectsAsFaults = false
+        do {
+            let results = try managedObjectContext.fetch(request)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    if var count = result.value(forKey: "count") as? Int32 {
+                        count = count + 1;
+                        result.setValue(count, forKey: "count")
+                    }
+                }
+            } else {
+                location = (NSEntityDescription.insertNewObject(forEntityName: "Location", into: managedObjectContext) as! Location)
+                location!.locationTitle = tempLocationTitle
+                location!.locationLatitude = tempLocationLatitude
+                location!.locationLongitude = tempLocationLongitude
+                location!.count = 1
+                appDelegate.startMonitoring(title: tempLocationTitle, longitude: tempLocationLatitude, latitude: tempLocationLongitude)
+
+            }
+        } catch {
+            
+        }
+        }
+        
       
         appDelegate.saveContext()
         dismiss(animated: true, completion: nil)
