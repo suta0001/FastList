@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		081A03B21E56D97100F06E16 /* FutureDueDateTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081A03B11E56D97100F06E16 /* FutureDueDateTableViewController.swift */; };
 		081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C741E39BB0F00DA4836 /* AppDelegate.swift */; };
 		081E9C7A1E39BB0F00DA4836 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C781E39BB0F00DA4836 /* Main.storyboard */; };
 		081E9C7F1E39BB0F00DA4836 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C7E1E39BB0F00DA4836 /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		081A03B11E56D97100F06E16 /* FutureDueDateTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureDueDateTableViewController.swift; sourceTree = "<group>"; };
 		081E9C711E39BB0F00DA4836 /* FastList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		081E9C741E39BB0F00DA4836 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		081E9C791E39BB0F00DA4836 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				081E9C741E39BB0F00DA4836 /* AppDelegate.swift */,
 				086DB1B91E3EB81600AD993E /* ItemTableViewCell.swift */,
 				08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */,
+				081A03B11E56D97100F06E16 /* FutureDueDateTableViewController.swift */,
 				08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */,
 				08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */,
 				B867E3271E47AE380077D908 /* TestLocations.gpx */,
@@ -316,6 +319,7 @@
 				086DB1BA1E3EB81600AD993E /* ItemTableViewCell.swift in Sources */,
 				08B4CEF21E3E99D0007E3BB4 /* SettingsTableViewController.swift in Sources */,
 				B8D3C6881E465D240017FC75 /* LocationSelectViewController.swift in Sources */,
+				081A03B21E56D97100F06E16 /* FutureDueDateTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
