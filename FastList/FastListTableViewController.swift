@@ -17,7 +17,8 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     let locationManager = CLLocationManager()
     let locationRadius = 1000
-    let futureDateToDisplayInSeconds = 2.0 * 3600 // Placeholder at 2 hours, will need to move to UserDefaults
+    var reloadTimer = Timer()
+    let futureDateToDisplayInSeconds = 2.0 * 3600 / 60// Placeholder at 2 hours, will need to move to UserDefaults
     
     
     override func viewDidLoad() {
@@ -34,6 +35,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         initializeRegionMonitoring()
         initializeFetchedResultsController(location: "")
         
+        reloadTimer = Timer.scheduledTimer(timeInterval: 0.1*futureDateToDisplayInSeconds, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -41,7 +43,6 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-
 
     // MARK: - Location based Fast List
     
@@ -147,6 +148,12 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
                 fatalError("Failed to initialize FetchedResultsController: \(error)")
             }
         }
+    }
+    
+    func reloadTable() {
+        initializeFetchedResultsController(location: "")
+        tableView.reloadData()
+        print("Fire")
     }
     
 }
