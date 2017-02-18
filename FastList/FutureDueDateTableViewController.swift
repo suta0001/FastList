@@ -1,15 +1,24 @@
 //
-//  SettingsTableViewController.swift
+//  FutureDueDateTableViewController.swift
 //  FastList
 //
-//  Created by Agustinus Sutandi and Abdullah Syed on 1/29/17.
+//  Created by Agustinus Sutandi on 2/16/17.
 //  Copyright © 2017 FastListTeam. All rights reserved.
 //
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController {
-
+class FutureDueDateTableViewController: UITableViewController {
+    let futureDueDates = [
+        "15 minutes",
+        "30 minutes",
+        "45 minutes",
+        "60 minutes",
+        "1 day",
+        "1 week",
+        "1 year"
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,19 +43,27 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 2
+        return futureDueDates.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FutureDueDateCell", for: indexPath)
 
-        // Configure the cell...
+        cell.textLabel?.text = futureDueDates[indexPath.row]
 
         return cell
     }
-    */
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = UITableViewCellAccessoryType.checkmark
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = UITableViewCellAccessoryType.none
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
