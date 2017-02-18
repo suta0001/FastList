@@ -15,25 +15,20 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Properties
     
-    let locationManager = CLLocationManager()
-    let locationRadius = 1000
+
     var reloadTimer = Timer()
     let futureDateToDisplayInSeconds = 2.0 * 3600 / 60// Placeholder at 2 hours, will need to move to UserDefaults
     
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
-        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let location = appDelegate.currentLocation
+        initializeFetchedResultsController(location: location)
+        NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
 
-        
-        initializeRegionMonitoring()
-        initializeFetchedResultsController(location: "")
         
         reloadTimer = Timer.scheduledTimer(timeInterval: 0.1*futureDateToDisplayInSeconds, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
         
@@ -45,75 +40,17 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     }
 
     // MARK: - Location based Fast List
-    
-    func initializeRegionMonitoring() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context1 = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
-        request.predicate = NSPredicate(format: "locationTitle != %@","")
-        request.returnsObjectsAsFaults = false
-        do {
-            let results = try context1.fetch(request)
-            if results.count > 0 {
-                for result in results as! [NSManagedObject] {
-                    if let title = result.value(forKey: "locationTitle") as? String {
-                        let long = result.value(forKey: "locationLongitude")
-                        let lat = result.value(forKey: "locationLatitude")
-                        print("FastList: \(title) \(long) \(lat)")
-                        let region = self.region(title: title, longitude: long as! Double, latitude: lat as! Double)
-                        locationManager.startMonitoring(for: region)
-                    }
-                }
-            }
-        } catch {
-            
-        }
-        
-        
-    }
-    
-    func region(title: String, longitude: Double, latitude: Double) -> CLCircularRegion {
-        
-        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let region = CLCircularRegion(center: coordinate, radius: CLLocationDistance(locationRadius), identifier: title)
-        region.notifyOnEntry = true
-        region.notifyOnExit = true
-        return region
-    }
-    
-    // MARK: - CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("error:: \(error.localizedDescription)")
-    }
-    
-    
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        if region is CLCircularRegion {
-            initializeFetchedResultsController(location: region.identifier)
-            handleEvent(forRegion: region)
-            tableView.reloadData()
-            
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        if region is CLCircularRegion {
-            initializeFetchedResultsController(location: "")
-            tableView.reloadData()
-        }
-    }
-    
-    func handleEvent(forRegion region: CLRegion!) {
-        print("Geofence triggered! for \(region.identifier)")
-    }
+
 
     
     // MARK: - Helper functions
+    
+    func refreshView(notification: NSNotification) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let location = appDelegate.currentLocation
+        initializeFetchedResultsController(location: location)
+        tableView.reloadData()
+    }
     
     func initializeFetchedResultsController(location: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
@@ -128,6 +65,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let maxDateToDisplay = Date(timeIntervalSinceNow: futureDateToDisplayInSeconds)
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locPredicate, timePredicate])
+
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext

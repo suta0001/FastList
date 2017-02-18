@@ -8,15 +8,23 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let locationManager = CLLocationManager()
+    var currentLocation = ""
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        //Prevent screen lock
+        UIApplication.shared.isIdleTimerDisabled = true
+        initializeRegionMonitoring()
         return true
     }
 
@@ -89,5 +97,90 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+extension AppDelegate: CLLocationManagerDelegate {
+    
+    func initializeRegionMonitoring() {
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context1 = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+        //request.predicate = NSPredicate(format: "locationTitle != %@","")
+        request.returnsObjectsAsFaults = false
+        do {
+            let results = try context1.fetch(request)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    if let title = result.value(forKey: "locationTitle") as? String {
+                        let long = result.value(forKey: "locationLongitude")
+                        let lat = result.value(forKey: "locationLatitude")
+                        print("FastList: \(title) \(long) \(lat)")
+                        let region = self.region(title: title, longitude: long as! Double, latitude: lat as! Double)
+                        locationManager.startMonitoring(for: region)
+                    }
+                }
+            }
+        } catch {
+            
+        }
+        
+        
+    }
+    
+    func startMonitoring(title: String, longitude: Double, latitude: Double) {
+        let reg = region(title: title, longitude: longitude, latitude: latitude)
+        locationManager.startMonitoring(for: reg)
+        
+    }
+    
+    func stopMonitoring(title: String, longitude: Double, latitude: Double) {
+        let reg = region(title: title, longitude: longitude, latitude: latitude)
+        locationManager.stopMonitoring(for: reg)
+    }
+    
+    func region(title: String, longitude: Double, latitude: Double) -> CLCircularRegion {
+        let locationRadius = 1000
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let region = CLCircularRegion(center: coordinate, radius: CLLocationDistance(locationRadius), identifier: title)
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
+        return region
+    }
+    
+    // MARK: - CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error:: \(error.localizedDescription)")
+    }
+    
+    func handleEvent(forRegion region: CLRegion!) {
+        print("Geofence triggered! for \(region.identifier)")
+    }
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            //FastListTableViewController.initializeFetchedResultsController(location: region.identifier)
+            handleEvent(forRegion: region)
+            currentLocation = region.identifier
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+
+            
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            //FastListTableViewController.initializeFetchedResultsController(location: "")
+            if(currentLocation == region.identifier) {
+                currentLocation = ""
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+
+            }
+        }
+    }
 }
 
