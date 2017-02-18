@@ -25,6 +25,8 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let location = appDelegate.currentLocation
         initializeFetchedResultsController(location: location)
+        NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+
         
         
         // Uncomment the following line to preserve selection between presentations
@@ -41,6 +43,13 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Helper functions
     
+    func refreshView(notification: NSNotification) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let location = appDelegate.currentLocation
+        initializeFetchedResultsController(location: location)
+        tableView.reloadData()
+    }
+    
     func initializeFetchedResultsController(location: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
        
@@ -54,6 +63,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let maxDateToDisplay = Date(timeIntervalSinceNow: futureDateToDisplayInSeconds)
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locPredicate, timePredicate])
+
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext

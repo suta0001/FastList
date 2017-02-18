@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
+        //Prevent screen lock
+        UIApplication.shared.isIdleTimerDisabled = true
         initializeRegionMonitoring()
         return true
     }
@@ -164,6 +166,8 @@ extension AppDelegate: CLLocationManagerDelegate {
             //FastListTableViewController.initializeFetchedResultsController(location: region.identifier)
             handleEvent(forRegion: region)
             currentLocation = region.identifier
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+
             
         }
     }
@@ -173,6 +177,8 @@ extension AppDelegate: CLLocationManagerDelegate {
             //FastListTableViewController.initializeFetchedResultsController(location: "")
             if(currentLocation == region.identifier) {
                 currentLocation = ""
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+
             }
         }
     }
