@@ -15,14 +15,9 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Properties
     
-<<<<<<< HEAD
-    let futureDateToDisplayInSeconds = 2.0 * 3600 // Placeholder at 2 hours, will need to move to UserDefaults
-=======
-    let locationManager = CLLocationManager()
-    let locationRadius = 1000
+
     var reloadTimer = Timer()
     let futureDateToDisplayInSeconds = 2.0 * 3600 / 60// Placeholder at 2 hours, will need to move to UserDefaults
->>>>>>> master
     
     let locationManager = CLLocationManager()
     
@@ -35,13 +30,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
 
         
-<<<<<<< HEAD
-=======
-        initializeRegionMonitoring()
-        initializeFetchedResultsController(location: "")
-        
         reloadTimer = Timer.scheduledTimer(timeInterval: 0.1*futureDateToDisplayInSeconds, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
->>>>>>> master
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
