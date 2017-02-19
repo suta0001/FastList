@@ -57,12 +57,17 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     }
     
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let sectionInfo = fetchedResultsController.sections?[section] else { fatalError("Unexpected Section") }
+        return sectionInfo.name
+    }
+    
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    
     
     
     // Override to support editing the table view.
@@ -217,6 +222,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         let moc = appDelegate.persistentContainer.viewContext
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
+        
         
         do {
             try fetchedResultsController.performFetch()

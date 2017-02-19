@@ -13,6 +13,10 @@ protocol LocationInfo{
     func sendValue(title:String, longitude:Double, latitude:Double)
 }
 
+protocol CategoryInfo{
+    func sendValue(CategoryIndex:Int)
+}
+
 class ItemViewController: UIViewController, UITextFieldDelegate {
 
     
@@ -22,24 +26,32 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
     var tempLocationLatitude = 0.0
     var tempLocationTitle = ""
     var tempLocationChanged = false
+    var tempCategoryChanged = false
+    var tempCategoryIndex = 0
+    var Category = [String]()
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var dueDate: UIDatePicker!
     @IBOutlet weak var hasDueDate: UISwitch!
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var locationLabel: UIButton!
+    @IBOutlet weak var categoryLabel: UIButton!
     weak var item: Item?
     weak var location: Location?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        Category = appDelegate.category
         // Handle the text field's user input through delegate callbacks.
         itemName.delegate = self
+    
         locationLabel.setTitle("Select Location", for: [])
+        categoryLabel.setTitle(Category[0], for: [])
         // When editing an existing Item, need to use passed info.
         if let item = item {
             itemName.text = item.name
+            categoryLabel.setTitle(item.categoryLabel, for: [])
             if(item.locationTitle != "") {
                 locationLabel.setTitle(item.locationTitle, for: [])
             } else {
@@ -118,14 +130,20 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             item!.completedDate = nil
             item!.hasDueDate = 0
             item!.locationTitle = ""
+            item!.categoryLabel = Category[0]
             
         }
         
         item!.name = name
         if(tempLocationChanged) {
             item!.locationTitle = tempLocationTitle
+            tempLocationChanged = false
         }
         
+        if(tempCategoryChanged) {
+            item!.categoryLabel = Category[tempCategoryIndex]
+            tempCategoryChanged = false
+        }
 
         if hasDueDate.isOn {
             item!.dueDate = dueDate.date as NSDate
@@ -181,6 +199,12 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
             }
             
             itemViewController.LocationInfoDelegate = self
+        case "CategorySelect":
+            guard let itemViewController = segue.destination as? CategorySelectTableViewController else {
+                fatalError("Destination not valid: \(segue.destination)")
+            }
+            
+            itemViewController.CategoryInfoDelegate = self
         default:
             fatalError("Invalid segue: \(segue.identifier)")
         }
@@ -213,5 +237,12 @@ extension ItemViewController:LocationInfo {
         if(tempLocationTitle != "") {
             locationLabel.setTitle(tempLocationTitle, for: [])
         }
+    }
+}
+
+extension ItemViewController:CategoryInfo{
+    func sendValue(CategoryIndex:Int) {
+        tempCategoryIndex = CategoryIndex
+        tempCategoryChanged = true
     }
 }

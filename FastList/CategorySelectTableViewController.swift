@@ -1,30 +1,28 @@
 //
-//  SettingsTableViewController.swift
+//  CategorySelectTableViewController.swift
 //  FastList
 //
-//  Created by Agustinus Sutandi and Abdullah Syed on 1/29/17.
+//  Created by Abdullah on 2/19/17.
 //  Copyright © 2017 FastListTeam. All rights reserved.
 //
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController {
+class CategorySelectTableViewController: UITableViewController {
 
-    @IBOutlet weak var idleTimer: UISwitch!
+    var CategoryInfoDelegate:CategoryInfo!
+    var Category = [String]()
+    var selectedCategory = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        Category = appDelegate.category
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        //Prevent screen lock
-        UIApplication.shared.isIdleTimerDisabled = idleTimer.isOn
-        print(idleTimer.isOn)
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,20 +39,31 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 2
+        return Category.count
     }
-    
-    
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategorySelectCell", for: indexPath)
+        
+        cell.textLabel?.text = Category[indexPath.row]
+        
+        if(indexPath.row == selectedCategory) {
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
+        }
+        
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexPathPreviousCheckMark = IndexPath(row: selectedCategory, section: 0)
+        let cellPreviousCheckMark = tableView.cellForRow(at: indexPathPreviousCheckMark)
+        cellPreviousCheckMark?.accessoryType = UITableViewCellAccessoryType.none
+        selectedCategory = indexPath.row
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = UITableViewCellAccessoryType.checkmark
+        CategoryInfoDelegate.sendValue(CategoryIndex: indexPath.row)
+    }
 
     /*
     // Override to support conditional editing of the table view.

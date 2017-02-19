@@ -55,10 +55,12 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     func initializeFetchedResultsController(location: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
        
-        let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
-        let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
-        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
+        let categoryLabelSort = NSSortDescriptor(key: "categoryLabel", ascending: true)
+        //let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
+        //let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
+        //let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
+        //request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort, categoryLabelSort]
+        request.sortDescriptors = [ categoryLabelSort]
         
         // Fetch based on location first
         let locPredicate = NSPredicate(format: "locationTitle = %@", location)
@@ -69,7 +71,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "categoryLabel", cacheName: nil)
         fetchedResultsController.delegate = self
         
         do {
