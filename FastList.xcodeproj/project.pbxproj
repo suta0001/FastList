@@ -20,6 +20,7 @@
 		08B4CEEE1E3E98D1007E3BB4 /* FastListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEED1E3E98D1007E3BB4 /* FastListTableViewController.swift */; };
 		08B4CEF01E3E999C007E3BB4 /* AllItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEEF1E3E999C007E3BB4 /* AllItemsTableViewController.swift */; };
 		08B4CEF21E3E99D0007E3BB4 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */; };
+		B87FB0801E5A257300FB0404 /* CategorySelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87FB07F1E5A257300FB0404 /* CategorySelectTableViewController.swift */; };
 		B8C49DB81E3D209C00788E5B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB71E3D209C00788E5B /* ItemViewController.swift */; };
 		B8D3C6881E465D240017FC75 /* LocationSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D3C6871E465D240017FC75 /* LocationSelectViewController.swift */; };
 		B8D3C68B1E46632F0017FC75 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8D3C68A1E46632F0017FC75 /* CoreLocation.framework */; };
@@ -67,6 +68,7 @@
 		B81217F31E483C1700EAE419 /* UWSeattleLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UWSeattleLocation.gpx; sourceTree = "<group>"; };
 		B81217F41E483C2A00EAE419 /* FredMayerLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FredMayerLocation.gpx; sourceTree = "<group>"; };
 		B867E3271E47AE380077D908 /* TestLocations.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TestLocations.gpx; sourceTree = "<group>"; };
+		B87FB07F1E5A257300FB0404 /* CategorySelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategorySelectTableViewController.swift; sourceTree = "<group>"; };
 		B8C49DB71E3D209C00788E5B /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
 		B8D3C6871E465D240017FC75 /* LocationSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSelectViewController.swift; sourceTree = "<group>"; };
 		B8D3C68A1E46632F0017FC75 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -135,6 +137,7 @@
 				B81217F31E483C1700EAE419 /* UWSeattleLocation.gpx */,
 				B81217F41E483C2A00EAE419 /* FredMayerLocation.gpx */,
 				B8C49DB71E3D209C00788E5B /* ItemViewController.swift */,
+				B87FB07F1E5A257300FB0404 /* CategorySelectTableViewController.swift */,
 				081E9C781E39BB0F00DA4836 /* Main.storyboard */,
 				B8D3C68C1E4679D10017FC75 /* LocationSearchTable.swift */,
 				B8D3C6871E465D240017FC75 /* LocationSelectViewController.swift */,
@@ -312,6 +315,7 @@
 				08ADA7C11E3EECA700B4CBCB /* Item.swift in Sources */,
 				08ADA7CB1E3EF0E800B4CBCB /* FastList.xcdatamodeld in Sources */,
 				B8C49DB81E3D209C00788E5B /* ItemViewController.swift in Sources */,
+				B87FB0801E5A257300FB0404 /* CategorySelectTableViewController.swift in Sources */,
 				08B4CEF01E3E999C007E3BB4 /* AllItemsTableViewController.swift in Sources */,
 				081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */,
 				B8D3C68D1E4679D10017FC75 /* LocationSearchTable.swift in Sources */,

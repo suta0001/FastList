@@ -16,14 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let locationManager = CLLocationManager()
     var currentLocation = ""
+    let category = ["Undefined","Grocery","Home Chores","Work Chores"]
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        //Prevent screen lock
-        UIApplication.shared.isIdleTimerDisabled = true
         initializeRegionMonitoring()
         return true
     }
