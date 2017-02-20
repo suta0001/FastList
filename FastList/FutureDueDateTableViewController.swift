@@ -9,14 +9,17 @@
 import UIKit
 
 class FutureDueDateTableViewController: UITableViewController {
+    
+    // MARK: - Properties
+    
     let futureDueDates = [
-        "15 minutes",
-        "30 minutes",
-        "45 minutes",
-        "60 minutes",
-        "1 day",
-        "1 week",
-        "1 year"
+        ("15 minutes", 15 * 60),
+        ("30 minutes", 30 * 60),
+        ("45 minutes", 45 * 60),
+        ("60 minutes", 60 * 60),
+        ("1 day", 24 * 60 * 60),
+        ("1 week", 7 * 24 * 60 * 60),
+        ("1 year", 52 * 7 * 24 * 60 * 60)
     ]
     
     override func viewDidLoad() {
@@ -29,6 +32,11 @@ class FutureDueDateTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setCheckmark()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -37,19 +45,16 @@ class FutureDueDateTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return futureDueDates.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FutureDueDateCell", for: indexPath)
-
-        cell.textLabel?.text = futureDueDates[indexPath.row]
+        cell.textLabel?.text = futureDueDates[indexPath.row].0
 
         return cell
     }
@@ -57,6 +62,9 @@ class FutureDueDateTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = UITableViewCellAccessoryType.checkmark
+        let futureDateSetting = futureDueDates[indexPath.row]
+        UserDefaults.standard.set(futureDateSetting.0, forKey: "futureDateToDisplayInSeconds")
+        UserDefaults.standard.set(futureDateSetting.1, forKey: "futureDateValueInSeconds")
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -109,4 +117,25 @@ class FutureDueDateTableViewController: UITableViewController {
     }
     */
 
+    // MARK: - Helper Functions
+    
+    private func setCheckmark() {
+        let savedDueDate = UserDefaults.standard.string(forKey: "futureDateToDisplayInSeconds") ?? "1 week"
+        let rowIndex = indexOf(toFind: savedDueDate, in: futureDueDates)
+        let indexPath = IndexPath(row: rowIndex, section: 0)
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = UITableViewCellAccessoryType.checkmark
+        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+    }
+    
+    private func indexOf(toFind: String, in array: [(String, Int)]) -> Int {
+        var index = 0
+        while index < array.count {
+            if toFind == array[index].0 {
+                break
+            }
+            index += 1
+        }
+        return index
+    }
 }

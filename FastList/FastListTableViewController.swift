@@ -15,10 +15,9 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Properties
     
-
     var reloadTimer = Timer()
-    var categoryAllowed = true
-    let futureDateToDisplayInSeconds = 2.0 * 3600 / 60// Placeholder at 2 hours, will need to move to UserDefaults
+    var categoryAllowed = UserDefaults.standard.bool(forKey: "categorySetting")
+    var futureDateToDisplayInSeconds = UserDefaults.standard.integer(forKey: "futureDateValueInSeconds") < 1 ? 7 * 24 * 60 * 60 : UserDefaults.standard.integer(forKey: "futureDateValueInSeconds")
     
     let locationManager = CLLocationManager()
     
@@ -29,9 +28,10 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let location = appDelegate.currentLocation
         initializeFetchedResultsController(location: location)
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateFromUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
 
-        
-        reloadTimer = Timer.scheduledTimer(timeInterval: 0.1*futureDateToDisplayInSeconds, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
+        // Timer to reload FastList table every 60 s.
+        reloadTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -47,10 +47,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     // MARK: - Helper functions
     
     func refreshView(notification: NSNotification) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let location = appDelegate.currentLocation
-        initializeFetchedResultsController(location: location)
-        tableView.reloadData()
+        reloadTable()
     }
     
     func initializeFetchedResultsController(location: String) {
@@ -73,7 +70,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         // Fetch based on location first
         let locPredicate = NSPredicate(format: "locationTitle = %@", location)
-        let maxDateToDisplay = Date(timeIntervalSinceNow: futureDateToDisplayInSeconds)
+        let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locPredicate, timePredicate])
 
@@ -104,9 +101,16 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     }
     
     func reloadTable() {
-        initializeFetchedResultsController(location: "")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let location = appDelegate.currentLocation
+        initializeFetchedResultsController(location: location)
         tableView.reloadData()
-        print("Fire")
+    }
+    
+    func updateFromUserDefaults(notification: Notification) {
+        categoryAllowed = UserDefaults.standard.bool(forKey: "categorySetting")
+        futureDateToDisplayInSeconds = UserDefaults.standard.integer(forKey: "futureDateValueInSeconds")
+        reloadTable()
     }
     
 }

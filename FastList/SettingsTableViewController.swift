@@ -10,19 +10,15 @@ import UIKit
 
 class SettingsTableViewController: UITableViewController {
 
+    // MARK: - Properties
+    
     @IBOutlet weak var idleTimer: UISwitch!
     @IBOutlet weak var categorySwitch: UISwitch!
+    @IBOutlet weak var dueDateDetail: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nameObject = UserDefaults.standard.object(forKey: "idleTimmerSetting")
-        if let timmer = nameObject as? Bool {
-            idleTimer.setOn(timmer, animated: true)
-        }
-        let nameObject1 = UserDefaults.standard.object(forKey: "categorySetting")
-        if let category = nameObject1 as? Bool {
-            categorySwitch.setOn(category, animated: true)
-        }
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -30,12 +26,15 @@ class SettingsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setSavedSettings()
+    }
     override func viewWillDisappear(_ animated: Bool) {
-        //Prevent screen lock
-        UIApplication.shared.isIdleTimerDisabled = idleTimer.isOn
-        UserDefaults.standard.set(categorySwitch.isOn, forKey: "categorySetting")
-        UserDefaults.standard.set(idleTimer.isOn, forKey: "idleTimmerSetting")
+        super.viewWillDisappear(animated)
         
+        UserDefaults.standard.set(categorySwitch.isOn, forKey: "categorySetting")
+        UserDefaults.standard.set(idleTimer.isOn, forKey: "idleTimerSetting")
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,12 +45,10 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return 3
     }
     
@@ -112,4 +109,11 @@ class SettingsTableViewController: UITableViewController {
     }
     */
 
+    // MARK: - Helper Functions
+    
+    private func setSavedSettings() {
+        idleTimer.setOn(UserDefaults.standard.bool(forKey: "idleTimerSetting"), animated: true)
+        categorySwitch.setOn(UserDefaults.standard.bool(forKey: "categorySetting"), animated: true)
+        dueDateDetail.text = UserDefaults.standard.string(forKey: "futureDateToDisplayInSeconds") ?? "1 week"
+    }
 }
