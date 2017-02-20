@@ -56,11 +56,11 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
        
         let categoryLabelSort = NSSortDescriptor(key: "categoryLabel", ascending: true)
-        //let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
-        //let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
-        //let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        //request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort, categoryLabelSort]
-        request.sortDescriptors = [ categoryLabelSort]
+        let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
+        let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
+        let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
+        request.sortDescriptors = [categoryLabelSort, hasDueDateSort, dueDateSort, dateSort]
+        //request.sortDescriptors = [ categoryLabelSort]
         
         // Fetch based on location first
         let locPredicate = NSPredicate(format: "locationTitle = %@", location)
