@@ -154,7 +154,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         }
         
         if(tempLocationTitle != ""){
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
         request.predicate = NSPredicate(format: "locationTitle != %@",tempLocationTitle)
         request.returnsObjectsAsFaults = false
         do {
