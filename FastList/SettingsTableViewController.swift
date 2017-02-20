@@ -11,8 +11,17 @@ import UIKit
 class SettingsTableViewController: UITableViewController {
 
     @IBOutlet weak var idleTimer: UISwitch!
+    @IBOutlet weak var categorySwitch: UISwitch!
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nameObject = UserDefaults.standard.object(forKey: "idleTimmerSetting")
+        if let timmer = nameObject as? Bool {
+            idleTimer.setOn(timmer, animated: true)
+        }
+        let nameObject1 = UserDefaults.standard.object(forKey: "categorySetting")
+        if let category = nameObject1 as? Bool {
+            categorySwitch.setOn(category, animated: true)
+        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -24,7 +33,9 @@ class SettingsTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         //Prevent screen lock
         UIApplication.shared.isIdleTimerDisabled = idleTimer.isOn
-        print(idleTimer.isOn)
+        UserDefaults.standard.set(categorySwitch.isOn, forKey: "categorySetting")
+        UserDefaults.standard.set(idleTimer.isOn, forKey: "idleTimmerSetting")
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,7 +52,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 2
+        return 3
     }
     
     

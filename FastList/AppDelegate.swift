@@ -21,9 +21,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let nameObject = UserDefaults.standard.object(forKey: "categorySetting")
+        
+        if let name = nameObject as? String {
+            print("Setting already set")
+        } else {
+            // Set default settings when used for the very first time
+            UserDefaults.standard.set(true, forKey: "categorySetting")
+            UserDefaults.standard.set(false, forKey: "idleTimmerSetting")
+        }
+        
+        
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         initializeRegionMonitoring()
+        
         return true
     }
 

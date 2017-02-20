@@ -17,6 +17,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
 
     var reloadTimer = Timer()
+    var categoryAllowed = true
     let futureDateToDisplayInSeconds = 2.0 * 3600 / 60// Placeholder at 2 hours, will need to move to UserDefaults
     
     let locationManager = CLLocationManager()
@@ -53,14 +54,22 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     }
     
     func initializeFetchedResultsController(location: String) {
+        let nameObject1 = UserDefaults.standard.object(forKey: "categorySetting")
+        if let category = nameObject1 as? Bool {
+            categoryAllowed = category
+        }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
        
         let categoryLabelSort = NSSortDescriptor(key: "categoryLabel", ascending: true)
         let hasDueDateSort = NSSortDescriptor(key: "hasDueDate", ascending: false)
         let dueDateSort = NSSortDescriptor(key: "dueDate", ascending: true)
         let dateSort = NSSortDescriptor(key: "creationDate", ascending: true)
-        request.sortDescriptors = [categoryLabelSort, hasDueDateSort, dueDateSort, dateSort]
-        //request.sortDescriptors = [ categoryLabelSort]
+        
+        if categoryAllowed {
+            request.sortDescriptors = [categoryLabelSort, hasDueDateSort, dueDateSort, dateSort]
+        } else {
+            request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
+        }
         
         // Fetch based on location first
         let locPredicate = NSPredicate(format: "locationTitle = %@", location)
@@ -71,7 +80,11 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "categoryLabel", cacheName: nil)
+        if categoryAllowed {
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "categoryLabel", cacheName: nil)
+        } else {
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        }
         fetchedResultsController.delegate = self
         
         do {
