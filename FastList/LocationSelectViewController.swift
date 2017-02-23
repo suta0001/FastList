@@ -37,7 +37,7 @@ class LocationSelectViewController: UIViewController {
         super.viewDidLoad()
         
         updateDoneButton()
-        print("Check 1")
+        //print("Check 1")
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -83,7 +83,7 @@ class LocationSelectViewController: UIViewController {
     }
     
     @IBAction func doneButton(_ sender: UIBarButtonItem) {
-        print("\(locationTitle)")
+        //print("\(locationTitle)")
         LocationInfoDelegate.sendValue(title: locationTitle,longitude: locationLongitude,latitude: locationLatitude)
         dismiss(animated: true, completion: nil)
     }
@@ -97,7 +97,7 @@ class LocationSelectViewController: UIViewController {
 extension LocationSelectViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("error:: \(error.localizedDescription)")
+        //print("error:: \(error.localizedDescription)")
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -112,7 +112,7 @@ extension LocationSelectViewController : CLLocationManagerDelegate {
             let span = MKCoordinateSpanMake(0.05, 0.05)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: true)
-            print("location:: \(location)")
+            //print("location:: \(location)")
         }
         
     }
@@ -128,13 +128,13 @@ extension LocationSelectViewController: HandleMapSearch {
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name
-        print("\(annotation.coordinate.latitude) \(annotation.coordinate.longitude) \(annotation.title)")
+        //print("\(annotation.coordinate.latitude) \(annotation.coordinate.longitude) \(annotation.title)")
         if annotation.title != nil {
             locationTitle = annotation.title!
             locationLongitude = annotation.coordinate.longitude
             locationLatitude = annotation.coordinate.latitude
         }
-        print("\(locationLatitude) \(locationLongitude) \(locationTitle)")
+        //print("\(locationLatitude) \(locationLongitude) \(locationTitle)")
         
         if let city = placemark.locality,
             let state = placemark.administrativeArea {

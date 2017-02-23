@@ -104,6 +104,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let location = appDelegate.currentLocation
         initializeFetchedResultsController(location: location)
+        //print(location)
         tableView.reloadData()
     }
     

@@ -122,7 +122,9 @@ extension AppDelegate: CLLocationManagerDelegate {
                     if let title = result.value(forKey: "locationTitle") as? String {
                         let long = result.value(forKey: "locationLongitude")
                         let lat = result.value(forKey: "locationLatitude")
-                        print("FastList: \(title) \(long) \(lat)")
+                        //let count = result.value(forKey: "count")
+                        //print(count)
+                        //print("FastList: \(title) \(long) \(lat)")
                         let region = self.region(title: title, longitude: long as! Double, latitude: lat as! Double)
                         locationManager.startMonitoring(for: region)
                     }
@@ -138,6 +140,8 @@ extension AppDelegate: CLLocationManagerDelegate {
     func startMonitoring(title: String, longitude: Double, latitude: Double) {
         let reg = region(title: title, longitude: longitude, latitude: latitude)
         locationManager.startMonitoring(for: reg)
+        print("Started Monitoring for")
+        print(title)
         
     }
     

@@ -155,7 +155,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         
         if(tempLocationTitle != ""){
         let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
-        request.predicate = NSPredicate(format: "locationTitle != %@",tempLocationTitle)
+        request.predicate = NSPredicate(format: "locationTitle == %@",tempLocationTitle)
         request.returnsObjectsAsFaults = false
         do {
             let results = try managedObjectContext.fetch(request)
@@ -233,7 +233,7 @@ extension ItemViewController:LocationInfo {
         tempLocationLatitude = latitude
         tempLocationTitle = title
         tempLocationChanged = true;
-        print("\(tempLocationTitle)")
+        //print("\(tempLocationTitle)")
         if(tempLocationTitle != "") {
             locationLabel.setTitle(tempLocationTitle, for: [])
         }
