@@ -109,6 +109,12 @@ class SettingsTableViewController: UITableViewController {
     }
     */
 
+    // MARK: - Actions
+    
+    @IBAction func disableAutoLock(_ sender: UISwitch) {
+        UIApplication.shared.isIdleTimerDisabled = sender.isOn
+    }
+    
     // MARK: - Helper Functions
     
     private func setSavedSettings() {

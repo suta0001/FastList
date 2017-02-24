@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0805B1951E5FF11200D59613 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0805B1941E5FF11200D59613 /* MapKit.framework */; };
+		0805B1971E5FF17900D59613 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0805B1961E5FF17900D59613 /* CoreData.framework */; };
 		081A03B21E56D97100F06E16 /* FutureDueDateTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081A03B11E56D97100F06E16 /* FutureDueDateTableViewController.swift */; };
 		081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081E9C741E39BB0F00DA4836 /* AppDelegate.swift */; };
 		081E9C7A1E39BB0F00DA4836 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 081E9C781E39BB0F00DA4836 /* Main.storyboard */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0805B1941E5FF11200D59613 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0805B1961E5FF17900D59613 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		081A03B11E56D97100F06E16 /* FutureDueDateTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureDueDateTableViewController.swift; sourceTree = "<group>"; };
 		081E9C711E39BB0F00DA4836 /* FastList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		081E9C741E39BB0F00DA4836 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0805B1971E5FF17900D59613 /* CoreData.framework in Frameworks */,
+				0805B1951E5FF11200D59613 /* MapKit.framework in Frameworks */,
 				B8D3C68B1E46632F0017FC75 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +176,8 @@
 		B8D3C6891E46632E0017FC75 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0805B1961E5FF17900D59613 /* CoreData.framework */,
+				0805B1941E5FF11200D59613 /* MapKit.framework */,
 				B8D3C68A1E46632F0017FC75 /* CoreLocation.framework */,
 			);
 			name = Frameworks;
@@ -245,6 +253,14 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = J7JEXX6TB6;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					081E9C871E39BB1000DA4836 = {
 						CreatedOnToolsVersion = 8.2.1;
