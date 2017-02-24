@@ -19,12 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let locationManager = CLLocationManager()
     var currentLocation = ""
     let category = ["Undefined","Grocery","Home Chores","Work Chores"]
+    var currentLongtitude = 0.0
+    var currentLatitude = 0.0
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        initializeRegionMonitoring()
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.distanceFilter = 100
+        locationManager.startUpdatingLocation()
+
+        //initializeRegionMonitoring()
         
         //Prevent screen lock
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
@@ -106,7 +112,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-extension AppDelegate: CLLocationManagerDelegate {
+extension AppDelegate : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error:: \(error.localizedDescription)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            locationManager.requestLocation()
+            
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if let location = locations.first {
+            currentLatitude = location.coordinate.latitude
+            currentLongtitude = location.coordinate.longitude
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+            //print("location:: \(location)")
+        }
+        
+    }
+    
+}
+
+extension AppDelegate {
     
     func initializeRegionMonitoring() {
         
@@ -161,14 +193,6 @@ extension AppDelegate: CLLocationManagerDelegate {
     
     // MARK: - CLLocationManagerDelegate
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("error:: \(error.localizedDescription)")
-    }
-    
     func handleEvent(forRegion region: CLRegion!) {
         print("Geofence triggered! for \(region.identifier)")
     }
@@ -177,7 +201,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             //FastListTableViewController.initializeFetchedResultsController(location: region.identifier)
             handleEvent(forRegion: region)
             currentLocation = region.identifier
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+            
 
             
         }
