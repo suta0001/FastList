@@ -79,7 +79,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
                 if location != "" {
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
                     let managedObjectContext = appDelegate.persistentContainer.viewContext
-                    let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+                    let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
                     request.predicate = NSPredicate(format: "locationTitle == %@", location)
                     request.returnsObjectsAsFaults = false
                     do {

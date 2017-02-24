@@ -25,8 +25,9 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         super.viewDidLoad()
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let location = appDelegate.currentLocation
-        initializeFetchedResultsController(location: location)
+        let lat = appDelegate.currentLatitude
+        let long = appDelegate.currentLongtitude
+        initializeFetchedResultsController(lat:lat,long:long)
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateFromUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
 
@@ -50,7 +51,35 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         reloadTable()
     }
     
-    func initializeFetchedResultsController(location: String) {
+    func initializeFetchedResultsController(lat: Double, long: Double) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context1 = appDelegate.persistentContainer.viewContext
+        let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+        let dummy = "zzzzz"
+        var locationPredict = NSPredicate(format: "locationTitle = %@",dummy)
+        let radius = 0.001;
+        print(lat)
+        print(long)
+        request1.predicate = NSPredicate(format:"locationLatitude > %f AND locationLatitude < %f AND locationLongitude > %f AND locationLongitude < %f", (lat - radius),  (lat + radius), (long - radius), (long + radius))
+        request1.returnsObjectsAsFaults = false
+        do {
+            let results = try context1.fetch(request1)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    if let title = result.value(forKey: "locationTitle") as? String {
+                        let singleLocationPredict = NSPredicate(format: "locationTitle = %@",title)
+                        locationPredict = NSCompoundPredicate(orPredicateWithSubpredicates: [singleLocationPredict, locationPredict])
+                        let long = result.value(forKey: "locationLongitude")
+                        let lat = result.value(forKey: "locationLatitude")
+                        print("Entered")
+                        print("FastList: \(title) \(long) \(lat)")
+                    }
+                }
+            }
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+        
         let nameObject1 = UserDefaults.standard.object(forKey: "categorySetting")
         if let category = nameObject1 as? Bool {
             categoryAllowed = category
@@ -68,14 +97,11 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
             request.sortDescriptors = [hasDueDateSort, dueDateSort, dateSort]
         }
         
-        // Fetch based on location first
-        let locPredicate = NSPredicate(format: "locationTitle = %@", location)
+        
         let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locPredicate, timePredicate])
-
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate])
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
         if categoryAllowed {
             fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "categoryLabel", cacheName: nil)
@@ -102,8 +128,9 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     func reloadTable() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let location = appDelegate.currentLocation
-        initializeFetchedResultsController(location: location)
+        let lat = appDelegate.currentLatitude
+        let long = appDelegate.currentLongtitude
+        initializeFetchedResultsController(lat:lat,long:long)
         //print(location)
         tableView.reloadData()
     }

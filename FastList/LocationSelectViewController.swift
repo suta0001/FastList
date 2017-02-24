@@ -39,8 +39,6 @@ class LocationSelectViewController: UIViewController {
         updateDoneButton()
         //print("Check 1")
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
