@@ -24,10 +24,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let lat = appDelegate.currentLatitude
-        let long = appDelegate.currentLongtitude
-        initializeFetchedResultsController(lat:lat,long:long)
+        reloadTable()
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateFromUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
 
@@ -69,15 +66,17 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
                     if let title = result.value(forKey: "locationTitle") as? String {
                         let singleLocationPredict = NSPredicate(format: "locationTitle = %@",title)
                         locationPredict = NSCompoundPredicate(orPredicateWithSubpredicates: [singleLocationPredict, locationPredict])
+                        /* Test
                         let long = result.value(forKey: "locationLongitude")
                         let lat = result.value(forKey: "locationLatitude")
                         print("Entered")
                         print("FastList: \(title) \(long) \(lat)")
+                         */
                     }
                 }
             }
         } catch {
-            fatalError("Failed to initialize FetchedResultsController: \(error)")
+            fatalError("Failed to fetch Location: \(error)")
         }
         
         let nameObject1 = UserDefaults.standard.object(forKey: "categorySetting")
