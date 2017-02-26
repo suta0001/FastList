@@ -24,11 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentLatitude = 0.0
     var eventStore = EKEventStore()
     var calender:String? = nil
+    var isAppInBackground = true
+    var reminderObject = Reminder()
+    var launchOpt:([UIApplicationLaunchOptionsKey: Any]?)
     
     
 
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        launchOpt = launchOptions
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
@@ -55,65 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 else {
                     print("Access to store granted")
-                    /*
-        if let cal = UserDefaults.standard.string(forKey: "FastListCalender") {
-            print(cal)
-            print("Check1111")
-            self.calender = cal
-        } else {
+                    self.checkAlarm()
         
-            // Use Event Store to create a new calendar instance
-            // Configure its title
-            let newCalendar = EKCalendar(for: .event, eventStore: self.eventStore)
-            
-            // Probably want to prevent someone from saving a calendar
-            // if they don't type in a name...
-            newCalendar.title = "FastListCalender"
-            
-            // Access list of available sources from the Event Store
-            let sourcesInEventStore = self.eventStore.sources
-            
-            // Filter the available sources and select the "Local" source to assign to the new calendar's
-            // source property
-            newCalendar.source = sourcesInEventStore.filter{
-                (source: EKSource) -> Bool in
-                source.sourceType.rawValue == EKSourceType.local.rawValue
-                }.first!
-            
-            // Save the calendar using the Event Store instance
-            do {
-                try self.eventStore.saveCalendar(newCalendar, commit: true)
-                let calIdentifer = newCalendar.calendarIdentifier
-                UserDefaults.standard.set(calIdentifer, forKey: "FastListCalender")
-                self.calender = calIdentifer
-                /*print("Check 111")
-                print(newCalendar.calendarIdentifier)
-                let cal = UserDefaults.standard.string(forKey: "FastListCalender")
-                print(cal)
-                let calendar = self.eventStore.calendar(withIdentifier: newCalendar.calendarIdentifier)
-                let reminder = EKReminder(eventStore: self.eventStore)
-                reminder.title = "FastList is Updated"
-                reminder.calendar = calendar!
-                
-                //let alarm = EKAlarm(absoluteDate: setDate)
-                //reminder.addAlarm(alarm)
-                
-                do {
-                    try self.eventStore.save(reminder,
-                                             commit: true)
-                    print("First Check Reminder")
-                } catch let error {
-                    print("Reminder failed with error \(error.localizedDescription)")
-                }*/
-                
-            } catch {
-                let alert = UIAlertController(title: "Calendar could not save", message: (error as NSError).localizedDescription, preferredStyle: .alert)
-                let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(OKAction)
-            }
-        }*/
-                }})
+                }
+        })
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+        
         return true
     }
 
@@ -121,6 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         UIApplication.shared.isIdleTimerDisabled = false
+        isAppInBackground = true
+        locationManager.stopUpdatingLocation()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -135,6 +87,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
+        locationManager.startUpdatingLocation()
+        reminderObject.removeReminderAlarm()
+        isAppInBackground = false
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -188,6 +143,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    func checkAlarm() {
+        if ((launchOpt?[UIApplicationLaunchOptionsKey.location]) != nil) {
+            reminderObject.createLocationReminderTriggeredInMinute()
+            isAppInBackground = true
+        } else {
+            reminderObject.removeReminderAlarm()
+            isAppInBackground = false
+        }
+    }
 
 }
 
@@ -214,11 +179,7 @@ extension AppDelegate : CLLocationManagerDelegate {
         }
         
     }
-    
-}
-
-extension AppDelegate {
-    
+    /*
     func initializeRegionMonitoring() {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -246,7 +207,7 @@ extension AppDelegate {
         }
         
         
-    }
+    }*/
     
     func startMonitoring(title: String, longitude: Double, latitude: Double) {
         let reg = region(title: title, longitude: longitude, latitude: latitude)
@@ -276,22 +237,25 @@ extension AppDelegate {
         print("Geofence triggered! for \(region.identifier)")
     }
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        if isAppInBackground {
+            reminderObject.createLocationReminderTriggeredInMinute()
+        }
         if region is CLCircularRegion {
             //FastListTableViewController.initializeFetchedResultsController(location: region.identifier)
             handleEvent(forRegion: region)
             currentLocation = region.identifier
-            
-
-            
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if isAppInBackground {
+            reminderObject.createLocationReminderTriggeredInMinute()
+        }
         if region is CLCircularRegion {
             //FastListTableViewController.initializeFetchedResultsController(location: "")
             if(currentLocation == region.identifier) {
-                currentLocation = ""
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
+                //currentLocation = ""
+                //NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
 
             }
         }
