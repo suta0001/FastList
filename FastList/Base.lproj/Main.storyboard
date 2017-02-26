@@ -409,7 +409,7 @@
         <scene sceneID="m2q-rM-VCy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qAm-jZ-WFA" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="FastList" id="81X-KB-1wj"/>
+                    <tabBarItem key="tabBarItem" title="FastList" image="FastListTabBarIcon" id="81X-KB-1wj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dJn-kJ-0Dc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -428,7 +428,7 @@
         <scene sceneID="aMq-mN-Udp">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yC7-NU-JWE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="All Items" id="TfO-zx-Hb8"/>
+                    <tabBarItem key="tabBarItem" title="All Items" image="AllItemsTabBarIcon" id="TfO-zx-Hb8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TCt-zo-tQr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -447,7 +447,7 @@
         <scene sceneID="WXG-TH-MxJ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tpj-tg-w1G" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" id="iv3-Ly-4Rk"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="SettingsTabBarIcon" id="iv3-Ly-4Rk"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="m5W-Lc-wzR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -669,6 +669,11 @@
             <point key="canvasLocation" x="4577" y="-1543"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="AllItemsTabBarIcon" width="24" height="20"/>
+        <image name="FastListTabBarIcon" width="37" height="41"/>
+        <image name="SettingsTabBarIcon" width="24" height="26"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="185-mA-Vze"/>
     </inferredMetricsTieBreakers>
