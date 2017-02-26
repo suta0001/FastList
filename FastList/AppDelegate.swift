@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import CoreLocation
+import EventKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,8 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let category = ["Undefined","Grocery","Home Chores","Work Chores"]
     var currentLongtitude = 0.0
     var currentLatitude = 0.0
+    var eventStore = EKEventStore()
+    var calender:String? = nil
+    
+    
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
@@ -34,7 +39,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Prevent screen lock
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
+        eventStore.requestAccess(to: EKEntityType.reminder, completion:
+            {(granted, error) in
+                if !granted {
+                    print("Access to store not granted")
+                }
+                else {
+                    print("Access to store granted")
+                }
+        })
+        eventStore.requestAccess(to: EKEntityType.event, completion:
+            {(granted, error) in
+                if !granted {
+                    print("Access to store not granted")
+                }
+                else {
+                    print("Access to store granted")
+                    /*
+        if let cal = UserDefaults.standard.string(forKey: "FastListCalender") {
+            print(cal)
+            print("Check1111")
+            self.calender = cal
+        } else {
         
+            // Use Event Store to create a new calendar instance
+            // Configure its title
+            let newCalendar = EKCalendar(for: .event, eventStore: self.eventStore)
+            
+            // Probably want to prevent someone from saving a calendar
+            // if they don't type in a name...
+            newCalendar.title = "FastListCalender"
+            
+            // Access list of available sources from the Event Store
+            let sourcesInEventStore = self.eventStore.sources
+            
+            // Filter the available sources and select the "Local" source to assign to the new calendar's
+            // source property
+            newCalendar.source = sourcesInEventStore.filter{
+                (source: EKSource) -> Bool in
+                source.sourceType.rawValue == EKSourceType.local.rawValue
+                }.first!
+            
+            // Save the calendar using the Event Store instance
+            do {
+                try self.eventStore.saveCalendar(newCalendar, commit: true)
+                let calIdentifer = newCalendar.calendarIdentifier
+                UserDefaults.standard.set(calIdentifer, forKey: "FastListCalender")
+                self.calender = calIdentifer
+                /*print("Check 111")
+                print(newCalendar.calendarIdentifier)
+                let cal = UserDefaults.standard.string(forKey: "FastListCalender")
+                print(cal)
+                let calendar = self.eventStore.calendar(withIdentifier: newCalendar.calendarIdentifier)
+                let reminder = EKReminder(eventStore: self.eventStore)
+                reminder.title = "FastList is Updated"
+                reminder.calendar = calendar!
+                
+                //let alarm = EKAlarm(absoluteDate: setDate)
+                //reminder.addAlarm(alarm)
+                
+                do {
+                    try self.eventStore.save(reminder,
+                                             commit: true)
+                    print("First Check Reminder")
+                } catch let error {
+                    print("Reminder failed with error \(error.localizedDescription)")
+                }*/
+                
+            } catch {
+                let alert = UIAlertController(title: "Calendar could not save", message: (error as NSError).localizedDescription, preferredStyle: .alert)
+                let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(OKAction)
+            }
+        }*/
+                }})
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         return true
     }
 

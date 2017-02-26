@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import MapKit
+import EventKit
 
 
 class FastListTableViewController:AllItemsTableViewController, CLLocationManagerDelegate {
@@ -24,7 +25,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        reloadTable()
+        //reloadTable()
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateFromUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
 
@@ -123,6 +124,34 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
                 fatalError("Failed to initialize FetchedResultsController: \(error)")
             }
         }
+        
+        
+        
+        
+        let request2 = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+        let timePredicate1 = NSPredicate(format: "dueDate > %@", maxDateToDisplay as NSDate)
+        request2.sortDescriptors = [dueDateSort]
+        request2.predicate = timePredicate1
+        request2.returnsObjectsAsFaults = false
+        do {
+            let results = try context1.fetch(request2)
+            if results.count > 0 {
+                var firstTime = true
+                for result in results as! [NSManagedObject] {
+                    if firstTime {
+                        firstTime = false
+                        if var date = result.value(forKey: "dueDate") as? Date {
+                            date.addTimeInterval(Double(-futureDateToDisplayInSeconds))
+                            createReminder(setDate: date )
+                        }
+                    }
+                }
+            }
+        } catch {
+            fatalError("Failed to fetch Location: \(error)")
+        }
+
+        
     }
     
     func reloadTable() {
@@ -140,5 +169,103 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         reloadTable()
     }
     
+    func createReminder(setDate: Date) {
+        var alarmSet = false
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let eventStoreFastList = appDelegate.eventStore
+        let predicate = eventStoreFastList.predicateForReminders(in: [])
+        eventStoreFastList.fetchReminders(matching: predicate, completion: { (reminders: [EKReminder]?) -> Void in
+            let reminders:[EKReminder] = reminders!
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let eventStoreFastList = appDelegate.eventStore
+            if reminders.count != 0 {
+            print("Reminders available")
+            for reminder:EKReminder in reminders {
+                let reminderTitle = "FastList is Updated"
+                if reminder.title == reminderTitle {
+                    for alarm in reminder.alarms! {
+                        reminder.removeAlarm(alarm)
+                    }
+                    //reminder.alarms[0].
+                    let alarm1 = EKAlarm(absoluteDate: setDate)
+                    reminder.addAlarm(alarm1)
+                    /*
+                    let context1 = appDelegate.persistentContainer.viewContext
+                    let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+                    request1.returnsObjectsAsFaults = false
+                    do {
+                        let results = try context1.fetch(request1)
+                        if results.count > 0 {
+                            for result in results as! [NSManagedObject] {
+                                if let title = result.value(forKey: "locationTitle") as? String {
+                                    let long = result.value(forKey: "locationLongitude")
+                                    let lat = result.value(forKey: "locationLatitude")
+                                    print("Entered")
+                                    print("FastList: \(title) \(long) \(lat)")
+                                    let location = EKStructuredLocation(title: "Current Location")
+                                    location.geoLocation = CLLocation(latitude: lat as! CLLocationDegrees, longitude: long as! CLLocationDegrees)
+                                    let alarm2 = EKAlarm()
+                                    alarm2.structuredLocation = location
+                                    alarm2.proximity = EKAlarmProximity.enter
+                                    reminder.addAlarm(alarm2)
+                                }
+                            }
+                        }
+                    } catch {
+                        fatalError("Failed to fetch Location: \(error)")
+                    }
+ */
+                    do {
+                        try eventStoreFastList.save(reminder,commit: true)
+                        alarmSet = true
+                    } catch let error {
+                        print("Reminder failed with error \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }
+            if !alarmSet {
+                let reminder = EKReminder(eventStore: eventStoreFastList)
+                reminder.title = "FastList is Updated"
+                reminder.calendar = eventStoreFastList.defaultCalendarForNewReminders()
+                let alarm = EKAlarm(absoluteDate: setDate)
+                reminder.addAlarm(alarm)
+                /*
+                let context1 = appDelegate.persistentContainer.viewContext
+                let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+                request1.returnsObjectsAsFaults = false
+                do {
+                    let results = try context1.fetch(request1)
+                    if results.count > 0 {
+                        for result in results as! [NSManagedObject] {
+                            if let title = result.value(forKey: "locationTitle") as? String {
+                                let long = result.value(forKey: "locationLongitude")
+                                let lat = result.value(forKey: "locationLatitude")
+                                print("Entered")
+                                print("FastList: \(title) \(long) \(lat)")
+                                let location = EKStructuredLocation(title: "Current Location")
+                                location.geoLocation = CLLocation(latitude: lat as! CLLocationDegrees, longitude: long as! CLLocationDegrees)
+                                let alarm2 = EKAlarm()
+                                alarm2.structuredLocation = location
+                                alarm2.proximity = EKAlarmProximity.enter
+                                reminder.addAlarm(alarm2)
+                            }
+                        }
+                    }
+                } catch {
+                    fatalError("Failed to fetch Location: \(error)")
+                }
+ */
+                do {
+                    try eventStoreFastList.save(reminder,
+                                                commit: true)
+                } catch let error {
+                    print("Reminder failed with error \(error.localizedDescription)")
+                }
+            }
+        })
+        
+        
+    }
 }
 

@@ -257,6 +257,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 0;
 							};
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
 							};
