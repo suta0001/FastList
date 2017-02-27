@@ -23,7 +23,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     let locationManager = CLLocationManager()
     var reminderDate:Date? = nil
     var reminderDateSet = false
-    var reminderObject = Reminder()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,7 +104,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate])
+        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [locationPredict, timePredicate])
         
         let moc = appDelegate.persistentContainer.viewContext
         if categoryAllowed {
@@ -176,6 +176,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     }
     
     func setReminderDateNotification() {
+        let reminderObject = Reminder()
         if reminderDateSet {
             reminderObject.createReminder(setDate: reminderDate! )
         }

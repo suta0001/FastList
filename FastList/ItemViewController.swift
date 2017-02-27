@@ -244,5 +244,6 @@ extension ItemViewController:CategoryInfo{
     func sendValue(CategoryIndex:Int) {
         tempCategoryIndex = CategoryIndex
         tempCategoryChanged = true
+        categoryLabel.setTitle(Category[CategoryIndex], for: [])
     }
 }

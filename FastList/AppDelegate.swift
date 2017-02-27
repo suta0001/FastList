@@ -25,8 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var eventStore = EKEventStore()
     var calender:String? = nil
     var isAppInBackground = true
-    var reminderObject = Reminder()
-    var launchOpt:([UIApplicationLaunchOptionsKey: Any]?)
+    var launchOpt:([UIApplicationLaunchOptionsKey: Any]?) 
     
     
 
@@ -87,8 +86,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
+        let reminderObject = Reminder()
         locationManager.startUpdatingLocation()
-        reminderObject.removeReminderAlarm()
+        //reminderObject.removeReminderAlarm()
         isAppInBackground = false
     }
 
@@ -145,6 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func checkAlarm() {
+        let reminderObject = Reminder()
         if ((launchOpt?[UIApplicationLaunchOptionsKey.location]) != nil) {
             reminderObject.createLocationReminderTriggeredInMinute()
             isAppInBackground = true
@@ -238,6 +239,7 @@ extension AppDelegate : CLLocationManagerDelegate {
     }
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if isAppInBackground {
+            let reminderObject = Reminder()
             reminderObject.createLocationReminderTriggeredInMinute()
         }
         if region is CLCircularRegion {
@@ -249,6 +251,7 @@ extension AppDelegate : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if isAppInBackground {
+            let reminderObject = Reminder()
             reminderObject.createLocationReminderTriggeredInMinute()
         }
         if region is CLCircularRegion {
