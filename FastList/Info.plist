@@ -30,6 +30,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Allow access for settign Fastlist Update Reminders</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow access to calender</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

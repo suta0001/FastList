@@ -172,7 +172,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
                 location!.locationLatitude = tempLocationLatitude
                 location!.locationLongitude = tempLocationLongitude
                 location!.count = 1
-                appDelegate.startMonitoring(title: tempLocationTitle, longitude: tempLocationLatitude, latitude: tempLocationLongitude)
+                appDelegate.startMonitoring(title: tempLocationTitle, longitude: tempLocationLongitude, latitude: tempLocationLatitude)
 
             }
         } catch {
@@ -244,5 +244,6 @@ extension ItemViewController:CategoryInfo{
     func sendValue(CategoryIndex:Int) {
         tempCategoryIndex = CategoryIndex
         tempCategoryChanged = true
+        categoryLabel.setTitle(Category[CategoryIndex], for: [])
     }
 }

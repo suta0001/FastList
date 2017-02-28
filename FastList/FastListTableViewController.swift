@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import MapKit
+import EventKit
 
 
 class FastListTableViewController:AllItemsTableViewController, CLLocationManagerDelegate {
@@ -20,13 +21,17 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     var futureDateToDisplayInSeconds = UserDefaults.standard.integer(forKey: "futureDateValueInSeconds") < 1 ? 7 * 24 * 60 * 60 : UserDefaults.standard.integer(forKey: "futureDateValueInSeconds")
     
     let locationManager = CLLocationManager()
+    var reminderDate:Date? = nil
+    var reminderDateSet = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        reloadTable()
+        //reloadTable()
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateFromUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: UserDefaults.standard)
+        NotificationCenter.default.addObserver(self, selector: #selector(setReminderDateNotification), name: Notification.Name.UIApplicationWillResignActive, object: UIApplication.shared)
 
         // Timer to reload FastList table every 60 s.
         reloadTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(FastListTableViewController.reloadTable), userInfo: nil, repeats: true)
@@ -99,7 +104,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate])
+        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [locationPredict, timePredicate])
         
         let moc = appDelegate.persistentContainer.viewContext
         if categoryAllowed {
@@ -123,6 +128,36 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
                 fatalError("Failed to initialize FetchedResultsController: \(error)")
             }
         }
+        
+        
+        
+        
+        let request2 = NSFetchRequest<NSFetchRequestResult>(entityName:"Item")
+        let timePredicate1 = NSPredicate(format: "dueDate > %@", maxDateToDisplay as NSDate)
+        request2.sortDescriptors = [dueDateSort]
+        request2.predicate = timePredicate1
+        request2.returnsObjectsAsFaults = false
+        do {
+            let results = try context1.fetch(request2)
+            if results.count > 0 {
+                var firstTime = true
+                for result in results as! [NSManagedObject] {
+                    if firstTime {
+                        firstTime = false
+                        if var date = result.value(forKey: "dueDate") as? Date {
+                            date.addTimeInterval(Double(-futureDateToDisplayInSeconds))
+                            reminderDate = date
+                            reminderDateSet = true
+                            //createReminder(setDate: date )
+                        }
+                    }
+                }
+            }
+        } catch {
+            fatalError("Failed to fetch Location: \(error)")
+        }
+
+        
     }
     
     func reloadTable() {
@@ -138,6 +173,13 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         categoryAllowed = UserDefaults.standard.bool(forKey: "categorySetting")
         futureDateToDisplayInSeconds = UserDefaults.standard.integer(forKey: "futureDateValueInSeconds")
         reloadTable()
+    }
+    
+    func setReminderDateNotification() {
+        let reminderObject = Reminder()
+        if reminderDateSet {
+            reminderObject.createReminder(setDate: reminderDate! )
+        }
     }
     
 }
