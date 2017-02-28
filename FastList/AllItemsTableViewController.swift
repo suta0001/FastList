@@ -20,6 +20,8 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         super.viewDidLoad()
         
         initializeFetchedResultsController()
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 44
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -154,6 +156,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .fade)
+            print("reload")
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
@@ -179,10 +182,12 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
                 fatalError("Destination not valid: \(segue.destination)")
             }
             
-            guard let button = sender as? UIButton else {
+            guard let selectedCell = sender as? ItemTableViewCell else {
                 fatalError("Sender not valid: \(sender)")
             }
-            let indexPath = IndexPath(row: button.tag % maxNumberOfItemsInSection, section: button.tag / maxNumberOfItemsInSection)
+            guard let indexPath = tableView.indexPath(for: selectedCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
             guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController")
             }
             itemViewController.item = selectedObject
@@ -237,14 +242,13 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     private func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
-        cell.name.setTitle(selectedObject.name, for: .normal)
-        cell.name.setTitleColor(UIColor.darkText, for: .normal)
+        cell.name.text = selectedObject.name
+        cell.name.textColor = UIColor.darkText
         cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
         if let dueDate = selectedObject.dueDate as? Date {
-            if dueDate < Date() {
-                cell.name.setTitleColor(UIColor.red, for: .normal)
-                cell.statusButton.setTitleColor(UIColor.red, for: .normal)
-            }
+            cell.isOverdue = dueDate < Date()
+        } else {
+            cell.isOverdue = false
         }
         cell.isCompleted = selectedObject.isCompleted
         let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row

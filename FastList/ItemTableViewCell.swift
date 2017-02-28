@@ -12,11 +12,16 @@ class ItemTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     
+    @IBOutlet weak var name: UILabel!
     @IBOutlet weak var statusButton: UIButton!
-    @IBOutlet weak var name: UIButton!
     var isCompleted = false {
         didSet {
-            updateButtons()
+            updateColorCode()
+        }
+    }
+    var isOverdue = false {
+        didSet {
+            updateColorCode()
         }
     }
     
@@ -33,8 +38,15 @@ class ItemTableViewCell: UITableViewCell {
     
     // MARK: - Private methods
     
-    private func updateButtons() {
+    private func updateColorCode() {
         statusButton.isSelected = isCompleted
-        name.isSelected = isCompleted
+        if isCompleted {
+            name.textColor = UIColor.gray
+        } else if isOverdue {
+            name.textColor = UIColor.red
+            statusButton.setTitleColor(UIColor.red, for: .normal)
+        } else {
+            name.textColor = UIColor.darkText
+        }
     }
 }
