@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C68" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C5b-e3-FuU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="C5b-e3-FuU">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -493,12 +495,14 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vLn-J9-Sxj" id="f6g-8z-xK2">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ybj-S4-xZ4">
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ybj-S4-xZ4">
                                             <rect key="frame" x="8" y="6" width="27" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="ybj-S4-xZ4" secondAttribute="height" multiplier="1:1" id="SnX-SG-iBW" userLabel="width = height (1:1)"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                             <state key="normal" title="○">
                                                 <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -510,25 +514,26 @@
                                                 <action selector="checkOffItem:" destination="t7K-HJ-gvp" eventType="touchUpInside" id="EcO-pL-vpX"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Svy-kM-AWs">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Item Text" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9L-Td-783">
                                             <rect key="frame" x="43" y="6" width="324" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <state key="normal" title="Item text">
-                                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            </state>
-                                            <state key="selected">
-                                                <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                            <connections>
-                                                <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="185-mA-Vze"/>
-                                            </connections>
-                                        </button>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="324" id="A4n-Cd-pq3"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="O9L-Td-783" firstAttribute="top" secondItem="ybj-S4-xZ4" secondAttribute="top" id="W7h-cK-o4m"/>
+                                        <constraint firstItem="O9L-Td-783" firstAttribute="trailing" secondItem="f6g-8z-xK2" secondAttribute="trailingMargin" id="W82-MK-Q19"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="O9L-Td-783" secondAttribute="bottom" id="fBK-Ag-YlO"/>
+                                        <constraint firstItem="O9L-Td-783" firstAttribute="leading" secondItem="ybj-S4-xZ4" secondAttribute="trailing" constant="8" symbolic="YES" id="kdd-Wn-fSb"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="name" destination="Svy-kM-AWs" id="eZO-fU-GEa"/>
                                     <outlet property="statusButton" destination="ybj-S4-xZ4" id="lkx-tW-Yfk"/>
+                                    <segue destination="Bhu-eP-x3y" kind="presentation" identifier="EditItem" id="tWn-0g-7pR"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -547,7 +552,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H8y-PE-Msb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-647" y="-1200"/>
+            <point key="canvasLocation" x="-647.20000000000005" y="-1200.4497751124438"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Hmx-sI-k1u">
@@ -671,10 +676,10 @@
     </scenes>
     <resources>
         <image name="AllItemsTabBarIcon" width="24" height="20"/>
-        <image name="FastListTabBarIcon" width="37" height="41"/>
+        <image name="FastListTabBarIcon" width="25" height="21"/>
         <image name="SettingsTabBarIcon" width="24" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="185-mA-Vze"/>
+        <segue reference="tWn-0g-7pR"/>
     </inferredMetricsTieBreakers>
 </document>
