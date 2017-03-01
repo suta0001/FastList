@@ -31,9 +31,9 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>Allow access for settign Fastlist Update Reminders</string>
+	<string>Allow access for setting a reminder</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Allow access to calender</string>
+	<string>Allow access to setup a reminder in the calender</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
