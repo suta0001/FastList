@@ -104,7 +104,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
-        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [locationPredict, timePredicate])
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate])
         
         let moc = appDelegate.persistentContainer.viewContext
         if categoryAllowed {
