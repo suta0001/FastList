@@ -8,7 +8,7 @@
 
 import UIKit
 import MapKit
-
+import CoreData
 
 protocol HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark)
@@ -22,6 +22,7 @@ class LocationSelectViewController: UIViewController {
     var locationTitle = ""
     var locationLongitude = 0.0
     var locationLatitude = 0.0
+    var selectedAnnotation = MKPointAnnotation()
     
 
 
@@ -39,7 +40,7 @@ class LocationSelectViewController: UIViewController {
         updateDoneButton()
         //print("Check 1")
         locationManager.delegate = self
-        locationManager.requestLocation()
+        //locationManager.requestLocation()
         
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -53,6 +54,8 @@ class LocationSelectViewController: UIViewController {
         definesPresentationContext = true
         locationSearchTable.mapView = mapView
         locationSearchTable.handleMapSearchDelegate = self
+        setLocation()
+        addPin()
 
         // Do any additional setup after loading the view.
         
@@ -89,6 +92,15 @@ class LocationSelectViewController: UIViewController {
         
         dismiss(animated: true, completion: nil)
     }
+    func setLocation() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let location = appDelegate.locationCurrentCL {
+            let span = MKCoordinateSpanMake(0.1, 0.1)
+            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+            mapView.setRegion(region, animated: true)
+            //print("location:: \(location)")
+        }
+    }
 }
 
 
@@ -107,7 +119,7 @@ extension LocationSelectViewController : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if let location = locations.first {
-            let span = MKCoordinateSpanMake(0.05, 0.05)
+            let span = MKCoordinateSpanMake(0.1, 0.1)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: true)
             //print("location:: \(location)")
@@ -117,12 +129,39 @@ extension LocationSelectViewController : CLLocationManagerDelegate {
     
 }
 
-extension LocationSelectViewController: HandleMapSearch {
+extension LocationSelectViewController: HandleMapSearch, MKMapViewDelegate{
+    func addPin(){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context1 = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+        //request.predicate = NSPredicate(format: "locationTitle != %@","")
+        request.returnsObjectsAsFaults = false
+        do {
+            let results = try context1.fetch(request)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    if let title = result.value(forKey: "locationTitle") as? String {
+                        let long = result.value(forKey: "locationLongitude")
+                        let lat = result.value(forKey: "locationLatitude")
+                        //let count = result.value(forKey: "count")
+                        //print(count)
+                        //print("FastList: \(title) \(long) \(lat)")
+                        let annotation = MKPointAnnotation()
+                        annotation.coordinate = CLLocationCoordinate2D(latitude: lat as! CLLocationDegrees, longitude: long as! CLLocationDegrees)
+                        annotation.title = title
+                        mapView.addAnnotation(annotation)
+                    }
+                }
+            }
+        } catch {
+            
+        }
+    }
     func dropPinZoomIn(placemark:MKPlacemark){
         // cache the pin
         selectedPin = placemark
         // clear existing pins
-        mapView.removeAnnotations(mapView.annotations)
+        //mapView.removeAnnotations(mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name
@@ -139,8 +178,21 @@ extension LocationSelectViewController: HandleMapSearch {
             annotation.subtitle = "\(city) \(state)"
         }
         mapView.addAnnotation(annotation)
-        let span = MKCoordinateSpanMake(0.05, 0.05)
+        let span = MKCoordinateSpanMake(0.1, 0.1)
         let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        mapView.setRegion(region, animated: true)
+        updateDoneButton()
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        selectedAnnotation = view.annotation as! MKPointAnnotation
+        if selectedAnnotation.title != nil {
+            locationTitle = selectedAnnotation.title!
+            locationLongitude = selectedAnnotation.coordinate.longitude
+            locationLatitude = selectedAnnotation.coordinate.latitude
+        }
+        let span = MKCoordinateSpanMake(0.1, 0.1)
+        let region = MKCoordinateRegionMake(selectedAnnotation.coordinate, span)
         mapView.setRegion(region, animated: true)
         updateDoneButton()
     }

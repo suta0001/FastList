@@ -25,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var eventStore = EKEventStore()
     var calender:String? = nil
     var isAppInBackground = true
-    var launchOpt:([UIApplicationLaunchOptionsKey: Any]?) 
+    var launchOpt:([UIApplicationLaunchOptionsKey: Any]?)
+    var locationCurrentCL:CLLocation? = nil
     
     
 
@@ -173,6 +174,7 @@ extension AppDelegate : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if let location = locations.first {
+            locationCurrentCL = location
             currentLatitude = location.coordinate.latitude
             currentLongtitude = location.coordinate.longitude
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
