@@ -104,7 +104,8 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         
         let maxDateToDisplay = Date(timeIntervalSinceNow: Double(futureDateToDisplayInSeconds))
         let timePredicate = NSPredicate(format: "dueDate <= %@ OR hasDueDate = 0", maxDateToDisplay as NSDate)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate])
+        let isNotCompletedPredicate = NSPredicate(format: "isCompleted = false")
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationPredict, timePredicate,isNotCompletedPredicate])
         
         let moc = appDelegate.persistentContainer.viewContext
         if categoryAllowed {
@@ -121,7 +122,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         }
         
         if fetchedResultsController.fetchedObjects?.count == 0 {
-            request.predicate = timePredicate
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate,isNotCompletedPredicate])
             do {
                 try fetchedResultsController.performFetch()
             } catch {
