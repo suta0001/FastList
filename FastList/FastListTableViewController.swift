@@ -53,8 +53,10 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         reloadTable()
     }
     
-    func initializeFetchedResultsController(lat: Double, long: Double) {
+    override func initializeFetchedResultsController() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let lat = appDelegate.currentLatitude
+        let long = appDelegate.currentLongtitude
         let context1 = appDelegate.persistentContainer.viewContext
         let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
         let dummy = "zzzzz"
@@ -162,10 +164,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     }
     
     func reloadTable() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let lat = appDelegate.currentLatitude
-        let long = appDelegate.currentLongtitude
-        initializeFetchedResultsController(lat:lat,long:long)
+        initializeFetchedResultsController()
         //print(location)
         tableView.reloadData()
     }
