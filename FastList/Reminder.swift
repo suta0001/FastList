@@ -108,6 +108,66 @@ class Reminder {
                     print("Reminders available")
                     for reminder:EKReminder in reminders {
                         if lastReminderSynDate < reminder.creationDate! {
+                            if !reminder.isCompleted {
+                                let managedObjectContext = appDelegate.persistentContainer.viewContext
+                                let Category = appDelegate.category
+                                weak var item: Item?
+                                weak var location: Location?
+                                if item == nil {
+                                    item = (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as! Item)
+                                    item!.isCompleted = false
+                                    item!.creationDate = Date() as NSDate
+                                    item!.completedDate = nil
+                                    item!.hasDueDate = 0
+                                    item!.locationTitle = ""
+                                    item!.categoryLabel = Category[0]
+                                }
+                                
+                                item!.name = reminder.title
+                                if let due = reminder.alarms?[0].absoluteDate{
+                                    
+                                    item!.dueDate = due as NSDate
+                                    item!.hasDueDate = 1
+                                }
+                                
+                                if let setLocation = reminder.alarms?[0].structuredLocation{
+                                    item!.locationTitle = setLocation.title
+                                    
+                                    let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
+                                    request.predicate = NSPredicate(format: "locationTitle == %@",setLocation.title)
+                                    request.returnsObjectsAsFaults = false
+                                    do {
+                                        let results = try managedObjectContext.fetch(request)
+                                        if results.count > 0 {
+                                            for result in results as! [NSManagedObject] {
+                                                if var count = result.value(forKey: "count") as? Int32 {
+                                                    count = count + 1;
+                                                    result.setValue(count, forKey: "count")
+                                                }
+                                            }
+                                        } else {
+                                            location = (NSEntityDescription.insertNewObject(forEntityName: "Location", into: managedObjectContext) as! Location)
+                                            location!.locationTitle = setLocation.title
+                                            location!.locationLatitude = setLocation.geoLocation!.coordinate.latitude
+                                            location!.locationLongitude = setLocation.geoLocation!.coordinate.longitude
+                                            location!.count = 1
+                                            appDelegate.startMonitoring(title: location!.locationTitle!, longitude: location!.locationLatitude, latitude: location!.locationLongitude)
+                                            
+                                        }
+                                    } catch {
+                                    }
+                                }
+                                appDelegate.saveContext()
+                            }
+                        }
+                    }
+                }
+            } else {
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                if reminders.count != 0 {
+                    print("Reminders available")
+                    for reminder:EKReminder in reminders {
+                        if !reminder.isCompleted {
                             let managedObjectContext = appDelegate.persistentContainer.viewContext
                             let Category = appDelegate.category
                             weak var item: Item?
@@ -120,6 +180,7 @@ class Reminder {
                                 item!.hasDueDate = 0
                                 item!.locationTitle = ""
                                 item!.categoryLabel = Category[0]
+                                
                             }
                             
                             item!.name = reminder.title
@@ -157,65 +218,8 @@ class Reminder {
                                 }
                             }
                             appDelegate.saveContext()
-
                         }
-                    }
-                }
-            } else {
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                if reminders.count != 0 {
-                    print("Reminders available")
-                    for reminder:EKReminder in reminders {
-                        let managedObjectContext = appDelegate.persistentContainer.viewContext
-                        let Category = appDelegate.category
-                        weak var item: Item?
-                        weak var location: Location?
-                        if item == nil {
-                            item = (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as! Item)
-                            item!.isCompleted = false
-                            item!.creationDate = Date() as NSDate
-                            item!.completedDate = nil
-                            item!.hasDueDate = 0
-                            item!.locationTitle = ""
-                            item!.categoryLabel = Category[0]
                         
-                        }
-                    
-                        item!.name = reminder.title
-                        if let due = reminder.alarms?[0].absoluteDate{
-                        
-                            item!.dueDate = due as NSDate
-                            item!.hasDueDate = 1
-                        }
-                    
-                        if let setLocation = reminder.alarms?[0].structuredLocation{
-                            item!.locationTitle = setLocation.title
-                        
-                            let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
-                            request.predicate = NSPredicate(format: "locationTitle == %@",setLocation.title)
-                            request.returnsObjectsAsFaults = false
-                            do {
-                                let results = try managedObjectContext.fetch(request)
-                                if results.count > 0 {
-                                    for result in results as! [NSManagedObject] {
-                                        if var count = result.value(forKey: "count") as? Int32 {
-                                            count = count + 1;
-                                            result.setValue(count, forKey: "count")
-                                        }
-                                    }
-                                } else {
-                                    location = (NSEntityDescription.insertNewObject(forEntityName: "Location", into: managedObjectContext) as! Location)
-                                    location!.locationTitle = setLocation.title
-                                    location!.locationLatitude = setLocation.geoLocation!.coordinate.latitude
-                                    location!.locationLongitude = setLocation.geoLocation!.coordinate.longitude
-                                    location!.count = 1
-                                    appDelegate.startMonitoring(title: location!.locationTitle!, longitude: location!.locationLatitude, latitude: location!.locationLongitude)
-                                
-                                }
-                            } catch {
-                            }
-                        }
-                        appDelegate.saveContext()
                     }
                 }
             }
