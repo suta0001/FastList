@@ -14,6 +14,7 @@ class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var idleTimer: UISwitch!
     @IBOutlet weak var categorySwitch: UISwitch!
+    @IBOutlet weak var syncReminder: UISwitch!
     @IBOutlet weak var dueDateDetail: UILabel!
     
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class SettingsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setSavedSettings()
@@ -35,6 +37,7 @@ class SettingsTableViewController: UITableViewController {
         
         UserDefaults.standard.set(categorySwitch.isOn, forKey: "categorySetting")
         UserDefaults.standard.set(idleTimer.isOn, forKey: "idleTimerSetting")
+        UserDefaults.standard.set(syncReminder.isOn, forKey: "syncReminderSetting")
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +52,7 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     
@@ -115,11 +118,24 @@ class SettingsTableViewController: UITableViewController {
         UIApplication.shared.isIdleTimerDisabled = sender.isOn
     }
     
+    @IBAction func synReminderAction(_ sender: UISwitch) {
+        if syncReminder.isOn {
+            DispatchQueue.global(qos: .utility).async {
+                DispatchQueue.main.async {
+                    let reminderObject = Reminder()
+                    reminderObject.syncReminders()
+                }
+            }
+        }
+        UserDefaults.standard.set(syncReminder.isOn, forKey: "syncReminderSetting")
+    }
+    
     // MARK: - Helper Functions
     
     private func setSavedSettings() {
         idleTimer.setOn(UserDefaults.standard.bool(forKey: "idleTimerSetting"), animated: true)
         categorySwitch.setOn(UserDefaults.standard.bool(forKey: "categorySetting"), animated: true)
+        syncReminder.setOn(UserDefaults.standard.bool(forKey: "syncReminderSetting"), animated: true)
         dueDateDetail.text = UserDefaults.standard.string(forKey: "futureDateToDisplayInSeconds") ?? "1 week"
     }
 }
