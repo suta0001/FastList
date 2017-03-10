@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 import CoreData
 import MapKit
 import EventKit
@@ -16,6 +17,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Properties
     
+    @IBOutlet weak var bannerView: GADBannerView!
     var reloadTimer = Timer()
     var categoryAllowed = UserDefaults.standard.bool(forKey: "categorySetting")
     var futureDateToDisplayInSeconds = UserDefaults.standard.integer(forKey: "futureDateValueInSeconds") < 1 ? 7 * 24 * 60 * 60 : UserDefaults.standard.integer(forKey: "futureDateValueInSeconds")
@@ -24,9 +26,13 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     var reminderDate:Date? = nil
     var reminderDateSet = false
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Firebase AdMob
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // Need to update with real one
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
         //reloadTable()
         NotificationCenter.default.addObserver(self, selector: #selector(FastListTableViewController.refreshView(notification:)), name: NSNotification.Name(rawValue: "refreshView"), object: nil)

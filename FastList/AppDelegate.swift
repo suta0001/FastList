@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import GoogleMobileAds
 import CoreData
 import CoreLocation
 import EventKit
@@ -31,6 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Firebase AdMob
+        FIRApp.configure()
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-3940256099942544~1458002511") // Need to update App ID after registering for AdMob account
+        
         launchOpt = launchOptions
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()

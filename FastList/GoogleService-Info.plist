@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>261381399273-8f2epkocc339patk2df1hoaao1oqqc2s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.261381399273-8f2epkocc339patk2df1hoaao1oqqc2s</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAHYoC4nnApx-jNlbF9Yayc9NhVlJZF9NU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>261381399273</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.FastListTeam.FastList</string>
+	<key>PROJECT_ID</key>
+	<string>fastlist-6efa6</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fastlist-6efa6.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false/>
+	<key>IS_GCM_ENABLED</key>
+	<false/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<false/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:261381399273:ios:cc8b00944e441f04</string>
+	<key>DATABASE_URL</key>
+	<string>https://fastlist-6efa6.firebaseio.com</string>
+</dict>
+</plist>
