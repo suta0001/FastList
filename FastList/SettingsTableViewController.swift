@@ -120,7 +120,7 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func synReminderAction(_ sender: UISwitch) {
         if syncReminder.isOn {
-            DispatchQueue.global(qos: .utility).async {
+            DispatchQueue.global(qos: .userInteractive).async {
                 DispatchQueue.main.async {
                     let reminderObject = Reminder()
                     reminderObject.syncReminders()

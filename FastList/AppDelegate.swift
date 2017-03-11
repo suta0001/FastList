@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         locationManager.startUpdatingLocation()
         isAppInBackground = false
         if UserDefaults.standard.bool(forKey: "syncReminderSetting") {
-            DispatchQueue.global(qos: .utility).async {
+            DispatchQueue.global(qos: .userInteractive).async {
                 DispatchQueue.main.async { 
                     let reminderObject = Reminder()
                     reminderObject.syncReminders()

@@ -39,7 +39,13 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // To be modified later. Currently, we want 1 section only.
-        return fetchedResultsController.sections!.count
+        if let section = fetchedResultsController.sections {
+            if section.count > 1 {
+                return section.count
+            }
+        }
+        // To be modified later. Currently, we want 1 section only.
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
