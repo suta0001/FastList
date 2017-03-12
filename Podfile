@@ -8,6 +8,7 @@ target 'FastList' do
   # Pods for FastList
   pod 'Firebase/Core'
   pod 'Firebase/AdMob'
+  pod "Ensembles","~>1.0"
 
   target 'FastListTests' do
     inherit! :search_paths

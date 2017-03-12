@@ -122,7 +122,7 @@ class Reminder {
                         for reminder:EKReminder in reminders {
                             if lastReminderSynDate < reminder.creationDate! {
                                 if ((!reminder.isCompleted) && (reminder.title != reminderFastListTitle)) {
-                                    let managedObjectContext = appDelegate.persistentContainer.viewContext
+                                    let managedObjectContext = appDelegate.coreDataManager.managedObjectContext
                                     let Category = appDelegate.category
                                     weak var item: Item?
                                     weak var location: Location?
@@ -167,7 +167,14 @@ class Reminder {
                                         } catch {
                                         }
                                     }
-                                    appDelegate.saveContext()
+                                    
+                                    do {
+                                        // Save Managed Object Context
+                                        try appDelegate.coreDataManager.managedObjectContext.save()
+                                        
+                                    } catch {
+                                        print("Unable to save managed object context.")
+                                    }
                                 }
                             }
                         }
@@ -178,7 +185,7 @@ class Reminder {
                         print("Reminders available")
                         for reminder:EKReminder in reminders {
                             if ((!reminder.isCompleted) && (reminder.title != reminderFastListTitle)) {
-                                let managedObjectContext = appDelegate.persistentContainer.viewContext
+                                let managedObjectContext = appDelegate.coreDataManager.managedObjectContext
                                 let Category = appDelegate.category
                                 weak var item: Item?
                                 weak var location: Location?
@@ -223,7 +230,14 @@ class Reminder {
                                     } catch {
                                     }
                                 }
-                                appDelegate.saveContext()
+                                
+                                do {
+                                    // Save Managed Object Context
+                                    try appDelegate.coreDataManager.managedObjectContext.save()
+                                    
+                                } catch {
+                                    print("Unable to save managed object context.")
+                                }
                             }
                         }
                     }
