@@ -122,7 +122,7 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         let name = itemName.text ?? ""
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        let managedObjectContext = appDelegate.coreDataManager.managedObjectContext
         if item == nil {
             item = (NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext) as! Item)
             item!.isCompleted = false
@@ -181,7 +181,14 @@ class ItemViewController: UIViewController, UITextFieldDelegate {
         }
         
       
-        appDelegate.saveContext()
+        
+        do {
+            // Save Managed Object Context
+            try appDelegate.coreDataManager.managedObjectContext.save()
+            
+        } catch {
+            print("Unable to save managed object context.")
+        }
         dismiss(animated: true, completion: nil)
     }
     

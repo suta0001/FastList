@@ -63,7 +63,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let lat = appDelegate.currentLatitude
         let long = appDelegate.currentLongtitude
-        let context1 = appDelegate.persistentContainer.viewContext
+        let context1 = appDelegate.coreDataManager.managedObjectContext
         let request1 = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
         let dummy = "zzzzz"
         var locationPredict = NSPredicate(format: "locationTitle = %@",dummy)
@@ -116,7 +116,7 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
         let locationTimePredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [locationPredict, timePredicate])
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [locationTimePredicate,isNotCompletedPredicate])
         
-        let moc = appDelegate.persistentContainer.viewContext
+        let moc = appDelegate.coreDataManager.managedObjectContext
         if categoryAllowed {
             fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "categoryLabel", cacheName: nil)
         } else {

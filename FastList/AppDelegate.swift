@@ -12,9 +12,10 @@ import GoogleMobileAds
 import CoreData
 import CoreLocation
 import EventKit
+import Ensembles
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembleDelegate {
 
     // MARK: - Properties
     
@@ -29,11 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var isAppInBackground = true
     var launchOpt:([UIApplicationLaunchOptionsKey: Any]?)
     var locationCurrentCL:CLLocation? = nil
+    let coreDataManager = CoreDataManager(modelName: "FastList")
     
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Firebase AdMob
+        print(coreDataManager.managedObjectContext)
         FIRApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3940256099942544~1458002511") // Need to update App ID after registering for AdMob account
         
@@ -46,7 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //initializeRegionMonitoring()
         
-        //Prevent screen lock
+        
+        
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
         eventStore.requestAccess(to: EKEntityType.reminder, completion:
             {(granted, error) in
@@ -113,51 +117,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         UIApplication.shared.isIdleTimerDisabled = false
-        self.saveContext()
-    }
-
-    // MARK: - Core Data stack
-
-    lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
-        let container = NSPersistentContainer(name: "FastList")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-
-    // MARK: - Core Data Saving support
-
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+        
+        do {
+            // Save Managed Object Context
+            try self.coreDataManager.managedObjectContext.save()
+        } catch {
+            print("Unable to save managed object context.")
         }
     }
     
@@ -198,35 +163,6 @@ extension AppDelegate : CLLocationManagerDelegate {
         }
         
     }
-    /*
-    func initializeRegionMonitoring() {
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context1 = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
-        //request.predicate = NSPredicate(format: "locationTitle != %@","")
-        request.returnsObjectsAsFaults = false
-        do {
-            let results = try context1.fetch(request)
-            if results.count > 0 {
-                for result in results as! [NSManagedObject] {
-                    if let title = result.value(forKey: "locationTitle") as? String {
-                        let long = result.value(forKey: "locationLongitude")
-                        let lat = result.value(forKey: "locationLatitude")
-                        //let count = result.value(forKey: "count")
-                        //print(count)
-                        //print("FastList: \(title) \(long) \(lat)")
-                        let region = self.region(title: title, longitude: long as! Double, latitude: lat as! Double)
-                        locationManager.startMonitoring(for: region)
-                    }
-                }
-            }
-        } catch {
-            
-        }
-        
-        
-    }*/
     
     func startMonitoring(title: String, longitude: Double, latitude: Double) {
         let reg = region(title: title, longitude: longitude, latitude: latitude)

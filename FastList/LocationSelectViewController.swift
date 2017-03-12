@@ -132,7 +132,7 @@ extension LocationSelectViewController : CLLocationManagerDelegate {
 extension LocationSelectViewController: HandleMapSearch, MKMapViewDelegate{
     func addPin(){
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context1 = appDelegate.persistentContainer.viewContext
+        let context1 = appDelegate.coreDataManager.managedObjectContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
         //request.predicate = NSPredicate(format: "locationTitle != %@","")
         request.returnsObjectsAsFaults = false

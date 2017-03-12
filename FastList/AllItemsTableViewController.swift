@@ -92,7 +92,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
             if let location = selectedObject.locationTitle {
                 if location != "" {
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    let managedObjectContext = appDelegate.persistentContainer.viewContext
+                    let managedObjectContext = appDelegate.coreDataManager.managedObjectContext
                     let request = NSFetchRequest<NSFetchRequestResult>(entityName:"Location")
                     request.predicate = NSPredicate(format: "locationTitle == %@", location)
                     request.returnsObjectsAsFaults = false
@@ -117,7 +117,14 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
                     
                 }
             }
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            
+            do {
+                // Save Managed Object Context
+                try (UIApplication.shared.delegate as! AppDelegate).coreDataManager.managedObjectContext.save()
+                
+            } catch {
+                print("Unable to save managed object context.")
+            }
             //tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -221,7 +228,14 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
             selectedObject.completedDate = nil
         }
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.saveContext()
+        
+        do {
+            // Save Managed Object Context
+            try appDelegate.coreDataManager.managedObjectContext.save()
+ 
+        } catch {
+            print("Unable to save managed object context.")
+        }
     }
     
     // MARK: - Helper functions
@@ -236,7 +250,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         //request.predicate = predicate
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let moc = appDelegate.persistentContainer.viewContext
+        let moc = appDelegate.coreDataManager.managedObjectContext
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
         
