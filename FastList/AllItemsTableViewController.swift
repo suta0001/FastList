@@ -50,7 +50,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sections = fetchedResultsController.sections else {
-            fatalError("No sections in fetchedResultsController")
+            return 0
         }
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
@@ -66,8 +66,14 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
     
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sectionInfo = fetchedResultsController.sections?[section] else { fatalError("Unexpected Section") }
-        return sectionInfo.name
+        if let sections = fetchedResultsController.sections {
+            let currentSection = sections[section]
+            return currentSection.name
+        }
+        
+        return nil
+        //guard let sectionInfo = fetchedResultsController.sections?[section] else { fatalError("Unexpected Section") }
+        //return sectionInfo.name
     }
     
     
