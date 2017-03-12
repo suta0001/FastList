@@ -95,13 +95,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.isIdleTimerDisabled = UserDefaults.standard.bool(forKey: "idleTimerSetting")
         locationManager.startUpdatingLocation()
         isAppInBackground = false
+        
         if UserDefaults.standard.bool(forKey: "syncReminderSetting") {
+            let reminderObject = Reminder()
+            reminderObject.syncReminders()
+            /*
             DispatchQueue.global(qos: .userInteractive).async {
                 DispatchQueue.main.async { 
                     let reminderObject = Reminder()
                     reminderObject.syncReminders()
                 }
-            }
+            }*/
         }
     }
 
