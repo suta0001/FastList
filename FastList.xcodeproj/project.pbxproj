@@ -26,6 +26,9 @@
 		08FF4D9D1E728B25008FB421 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08FF4D9C1E728B25008FB421 /* GoogleService-Info.plist */; };
 		1EAE072590AAC6C47859C2C5 /* Pods_FastListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F48D9B907613D17BC281D31A /* Pods_FastListTests.framework */; };
 		3EB3A3F06CE5C8E251686DC6 /* Pods_FastListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E69FA76B75A5BE617EB9BD6D /* Pods_FastListUITests.framework */; };
+		B83005811E75EA2000884688 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B83005801E75EA2000884688 /* CloudKit.framework */; };
+		B83005831E75F1F300884688 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83005821E75F1F300884688 /* CoreDataManager.swift */; };
+		B830058C1E76070900884688 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B830058B1E76070900884688 /* Location.swift */; };
 		B87FB0801E5A257300FB0404 /* CategorySelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87FB07F1E5A257300FB0404 /* CategorySelectTableViewController.swift */; };
 		B88FBCA01E6372C600B82E32 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88FBC9F1E6372C600B82E32 /* Reminder.swift */; };
 		B8C49DB81E3D209C00788E5B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C49DB71E3D209C00788E5B /* ItemViewController.swift */; };
@@ -80,6 +83,10 @@
 		B81217F21E483C0500EAE419 /* UWBothellLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UWBothellLocation.gpx; sourceTree = "<group>"; };
 		B81217F31E483C1700EAE419 /* UWSeattleLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UWSeattleLocation.gpx; sourceTree = "<group>"; };
 		B81217F41E483C2A00EAE419 /* FredMayerLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FredMayerLocation.gpx; sourceTree = "<group>"; };
+		B830057F1E75EA1900884688 /* FastList.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FastList.entitlements; sourceTree = "<group>"; };
+		B83005801E75EA2000884688 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		B83005821E75F1F300884688 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		B830058B1E76070900884688 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		B867E3271E47AE380077D908 /* TestLocations.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TestLocations.gpx; sourceTree = "<group>"; };
 		B87FB07F1E5A257300FB0404 /* CategorySelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategorySelectTableViewController.swift; sourceTree = "<group>"; };
 		B88FBC9F1E6372C600B82E32 /* Reminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
@@ -100,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B83005811E75EA2000884688 /* CloudKit.framework in Frameworks */,
 				0805B1971E5FF17900D59613 /* CoreData.framework in Frameworks */,
 				0805B1951E5FF11200D59613 /* MapKit.framework in Frameworks */,
 				B8D3C68B1E46632F0017FC75 /* CoreLocation.framework in Frameworks */,
@@ -151,8 +159,10 @@
 		081E9C731E39BB0F00DA4836 /* FastList */ = {
 			isa = PBXGroup;
 			children = (
+				B830057F1E75EA1900884688 /* FastList.entitlements */,
 				08ADA7C01E3EECA700B4CBCB /* Item.swift */,
 				081E9C741E39BB0F00DA4836 /* AppDelegate.swift */,
+				B83005821E75F1F300884688 /* CoreDataManager.swift */,
 				B88FBC9F1E6372C600B82E32 /* Reminder.swift */,
 				086DB1B91E3EB81600AD993E /* ItemTableViewCell.swift */,
 				08B4CEF11E3E99D0007E3BB4 /* SettingsTableViewController.swift */,
@@ -173,6 +183,7 @@
 				08ADA7C91E3EF0E800B4CBCB /* FastList.xcdatamodeld */,
 				081E9C831E39BB0F00DA4836 /* Info.plist */,
 				08FF4D9C1E728B25008FB421 /* GoogleService-Info.plist */,
+				B830058B1E76070900884688 /* Location.swift */,
 			);
 			path = FastList;
 			sourceTree = "<group>";
@@ -198,6 +209,7 @@
 		B8D3C6891E46632E0017FC75 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B83005801E75EA2000884688 /* CloudKit.framework */,
 				0805B1961E5FF17900D59613 /* CoreData.framework */,
 				0805B1941E5FF11200D59613 /* MapKit.framework */,
 				B8D3C68A1E46632F0017FC75 /* CoreLocation.framework */,
@@ -298,7 +310,7 @@
 				TargetAttributes = {
 					081E9C701E39BB0F00DA4836 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = J7JEXX6TB6;
+						DevelopmentTeam = Y4S7XD44RQ;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -309,6 +321,12 @@
 							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
 							};
 						};
 					};
@@ -524,11 +542,13 @@
 				08B4CEF01E3E999C007E3BB4 /* AllItemsTableViewController.swift in Sources */,
 				081E9C751E39BB0F00DA4836 /* AppDelegate.swift in Sources */,
 				B8D3C68D1E4679D10017FC75 /* LocationSearchTable.swift in Sources */,
+				B830058C1E76070900884688 /* Location.swift in Sources */,
 				08B4CEEE1E3E98D1007E3BB4 /* FastListTableViewController.swift in Sources */,
 				086DB1BA1E3EB81600AD993E /* ItemTableViewCell.swift in Sources */,
 				B88FBCA01E6372C600B82E32 /* Reminder.swift in Sources */,
 				08B4CEF21E3E99D0007E3BB4 /* SettingsTableViewController.swift in Sources */,
 				B8D3C6881E465D240017FC75 /* LocationSelectViewController.swift in Sources */,
+				B83005831E75F1F300884688 /* CoreDataManager.swift in Sources */,
 				081A03B21E56D97100F06E16 /* FutureDueDateTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,11 +702,13 @@
 			baseConfigurationReference = B57EAE7C989C7C8D9AF925E5 /* Pods-FastList.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = J7JEXX6TB6;
+				CODE_SIGN_ENTITLEMENTS = FastList/FastList.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = Y4S7XD44RQ;
 				INFOPLIST_FILE = FastList/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.FastListTeam.FastList;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FastListTeam.FastListVer2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -698,11 +720,13 @@
 			baseConfigurationReference = E268C7D83FF88863509DB6D0 /* Pods-FastList.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = J7JEXX6TB6;
+				CODE_SIGN_ENTITLEMENTS = FastList/FastList.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = Y4S7XD44RQ;
 				INFOPLIST_FILE = FastList/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.FastListTeam.FastList;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FastListTeam.FastListVer2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

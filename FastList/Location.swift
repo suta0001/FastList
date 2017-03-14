@@ -1,28 +1,27 @@
 //
-//  Item.swift
+//  Location.swift
 //  FastList
 //
-//  Created by Agustinus Sutandi and Abdullah Syed on 1/29/17.
+//  Created by Abdullah on 3/12/17.
 //  Copyright © 2017 FastListTeam. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-extension Item {
+extension Location {
     
     @NSManaged var uniqueIdentifier: NSString
     @NSManaged var number: NSNumber
-    class func numberHolderInContext(_ context:NSManagedObjectContext) -> Item {
-        var holder:Item?
+    class func numberHolderInContext(_ context:NSManagedObjectContext) -> Location {
+        var holder:Location?
         context.performAndWait {
-            let fetch = NSFetchRequest<Item>(entityName: "Item")
+            let fetch = NSFetchRequest<Location>(entityName: "Location")
             holder = try! fetch.execute().last
             if holder == nil {
-                holder = Item(context:context)
+                holder = Location(context:context)
             }
         }
         return holder!
     }
 }
-

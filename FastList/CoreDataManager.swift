@@ -14,6 +14,8 @@ final class CoreDataManager {
     // MARK: - Properties
     private let modelName: String
     
+    public var storeURL:URL? = nil
+    
     // MARK: - Initialization
     init(modelName: String) {
         self.modelName = modelName
@@ -24,7 +26,7 @@ final class CoreDataManager {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         
         managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
-        
+        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return managedObjectContext
     }()
     
@@ -40,7 +42,9 @@ final class CoreDataManager {
         return managedObjectModel
     }()
     
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
+    
+    
+    private(set) lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         
         let fileManager = FileManager.default
@@ -49,6 +53,7 @@ final class CoreDataManager {
         let documentsDirectoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         
         let persistentStoreURL = documentsDirectoryURL.appendingPathComponent(storeName)
+        self.storeURL = persistentStoreURL
         
         do {
             try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
