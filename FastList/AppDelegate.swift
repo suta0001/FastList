@@ -36,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembl
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Firebase AdMob
-        print(coreDataManager.managedObjectContext)
         FIRApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3940256099942544~1458002511") // Need to update App ID after registering for AdMob account
         
@@ -74,6 +73,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembl
         })
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshView"), object: nil)
         
+        // Use verbose logging for sync
+        CDESetCurrentLoggingLevel(CDELoggingLevel.verbose.rawValue)
+        
+        
+        // Create holder object if necessary. Ensure it is fully saved before we leech.
+        _ = Item.numberHolderInContext(coreDataManager.managedObjectContext)
+        _ = Location.numberHolderInContext(coreDataManager.managedObjectContext)
+        try! coreDataManager.managedObjectContext.save()
+        
+        // Setup Ensemble
+        let modelURL = Bundle.main.url(forResource: "FastList", withExtension: "momd")
+        cloudFileSystem = CDEICloudFileSystem(ubiquityContainerIdentifier: nil)
+        ensemble = CDEPersistentStoreEnsemble(ensembleIdentifier: "NumberStore", persistentStore: (coreDataManager.storeURL)!, managedObjectModelURL: modelURL!, cloudFileSystem: cloudFileSystem)
+        ensemble.delegate = self
+        
+        // Listen for local saves, and trigger merges
+        NotificationCenter.default.addObserver(self, selector:#selector(AppDelegate.localSaveOccurred(_:)), name:NSNotification.Name.CDEMonitoredManagedObjectContextDidSave, object:nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(AppDelegate.cloudDataDidDownload(_:)), name:NSNotification.Name.CDEICloudFileSystemDidDownloadFiles, object:nil)
+
+        // Sync
+        self.sync(nil)
         return true
     }
 
@@ -92,6 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembl
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        self.sync(nil)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -117,12 +138,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembl
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         UIApplication.shared.isIdleTimerDisabled = false
-        
+        let taskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
         do {
             // Save Managed Object Context
             try self.coreDataManager.managedObjectContext.save()
         } catch {
             print("Unable to save managed object context.")
+        }
+        self.sync {
+            UIApplication.shared.endBackgroundTask(taskIdentifier)
         }
     }
     
@@ -136,6 +160,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CDEPersistentStoreEnsembl
             isAppInBackground = false
         }
     }
+    
+    // MARK: Notification Handlers
+    
+    func localSaveOccurred(_ notif: Notification) {
+        self.sync(nil)
+    }
+    
+    func cloudDataDidDownload(_ notif: Notification) {
+        self.sync(nil)
+    }
+    
+    // MARK: Ensembles
+    
+    var cloudFileSystem: CDECloudFileSystem!
+    var ensemble: CDEPersistentStoreEnsemble!
+    
+    func sync(_ completion: ((Void) -> Void)?) {
+        
+        if !ensemble.isLeeched {
+            ensemble.leechPersistentStore {
+                error in
+                completion?()
+            }
+        }
+        else {
+            ensemble.merge {
+                error in
+                completion?()
+            }
+        }
+    }
+    
+    func persistentStoreEnsemble(_ ensemble: CDEPersistentStoreEnsemble, didSaveMergeChangesWith notification: Notification) {
+        coreDataManager.managedObjectContext.performAndWait {
+            self.coreDataManager.managedObjectContext.mergeChanges(fromContextDidSave: notification)
+        }
+    }
+    /*
+    func persistentStoreEnsemble(_ ensemble: CDEPersistentStoreEnsemble!, globalIdentifiersForManagedObjects objects: [Any]!) -> [Any]! {
+        var numberHolders:Any? = nil
+        if let abc = objects as? [Item] {
+            numberHolders = objects as! [Item]
+        } else {
+            numberHolders = objects as! [Location]
+        }
+        return numberHolders.map { $0.uniqueIdentifier }
+    }*/
 
 }
 
