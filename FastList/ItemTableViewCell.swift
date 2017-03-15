@@ -12,6 +12,7 @@ class ItemTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     
+    @IBOutlet weak var detail: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var statusButton: UIButton!
     var isCompleted = false {
@@ -42,11 +43,14 @@ class ItemTableViewCell: UITableViewCell {
         statusButton.isSelected = isCompleted
         if isCompleted {
             name.textColor = UIColor.gray
+            detail.textColor = UIColor.gray
         } else if isOverdue {
             name.textColor = UIColor.red
+            detail.textColor = UIColor.red
             statusButton.setTitleColor(UIColor.red, for: .normal)
         } else {
             name.textColor = UIColor.darkText
+            detail.textColor = UIColor.darkText
         }
     }
 }

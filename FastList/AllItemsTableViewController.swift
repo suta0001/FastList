@@ -258,13 +258,26 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         cell.name.textColor = UIColor.darkText
         cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
         if let dueDate = selectedObject.dueDate as? Date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .short
+            cell.detail.text = "Due: \(dateFormatter.string(from: dueDate))"
             cell.isOverdue = dueDate < Date()
         } else {
+            cell.detail.text = ""
             cell.isOverdue = false
+        }
+        if selectedObject.locationTitle != "" {
+            let location = selectedObject.locationTitle!
+            if cell.detail.text != "" {
+                cell.detail.text! += ", "
+            }
+            cell.detail.text! += "Location: \(location)"
         }
         cell.isCompleted = selectedObject.isCompleted
         let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row
         cell.name.tag = codedIndexPath
+        cell.detail.tag = codedIndexPath
         cell.statusButton.tag = codedIndexPath
     }
 }
