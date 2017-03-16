@@ -249,15 +249,12 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
         
     }
     
-    
-    // MARK: - Private functions
-    
-    private func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
+    func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
         cell.name.text = selectedObject.name
-        cell.name.textColor = UIColor.darkText
-        cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
-        if let dueDate = selectedObject.dueDate as? Date {
+        //cell.name.textColor = UIColor.darkText
+        //cell.statusButton.setTitleColor(UIColor.darkText, for: .normal)
+        /*if let dueDate = selectedObject.dueDate as? Date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateStyle = .short
             dateFormatter.timeStyle = .short
@@ -273,7 +270,7 @@ class AllItemsTableViewController: UITableViewController, NSFetchedResultsContro
                 cell.detail.text! += ", "
             }
             cell.detail.text! += "Location: \(location)"
-        }
+        }*/
         cell.isCompleted = selectedObject.isCompleted
         let codedIndexPath = indexPath.section * maxNumberOfItemsInSection + indexPath.row
         cell.name.tag = codedIndexPath

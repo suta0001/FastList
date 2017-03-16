@@ -55,6 +55,26 @@ class FastListTableViewController:AllItemsTableViewController, CLLocationManager
     
     // MARK: - Helper functions
     
+    override func configureCell(cell: ItemTableViewCell, indexPath: IndexPath) {
+        super.configureCell(cell: cell, indexPath: indexPath)
+        guard let selectedObject = fetchedResultsController.object(at: indexPath) as? Item else { fatalError("Unexpected Object in FetchedResultsController") }
+        if let dueDate = selectedObject.dueDate as? Date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .short
+            cell.detail.text = "Due: \(dateFormatter.string(from: dueDate))"
+            cell.isOverdue = dueDate < Date()
+        } else {
+            cell.detail.text = ""
+            cell.isOverdue = false
+        }
+        if selectedObject.locationTitle != "" {
+            cell.hasLocation = true
+        } else {
+            cell.hasLocation = false
+        }
+    }
+
     func refreshView(notification: NSNotification) {
         reloadTable()
     }
